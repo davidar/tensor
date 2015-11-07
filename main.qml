@@ -70,27 +70,49 @@ ApplicationWindow {
 
     SplitView {
         anchors.fill: parent
-        Column {
+
+        Rectangle {
             width: parent.width / 5
-            Repeater {
-                model: tabView.count
-                delegate: Rectangle {
-                    width: parent.width
-                    height: Math.max(20, roomLabel.implicitHeight + 4)
-                    color: tabView.currentIndex == index ? "sky blue" : "transparent"
-                    Label {
-                        id: roomLabel
-                        text: tabView.getTab(index).title
-                        anchors.margins: 2
-                        anchors.leftMargin: 6
-                        anchors.left: parent.left
-                        anchors.right: parent.right
-                        anchors.verticalCenter: parent.verticalCenter
+            color: "#6a1b9a"
+
+            ScrollView {
+                anchors.fill: parent
+
+                ListView {
+                    id: roomListView
+                    model: rooms
+
+                    delegate: Rectangle {
+                        width: parent.width
+                        height: Math.max(20, roomLabel.implicitHeight + 4)
+                        color: "transparent"
+
+                        Label {
+                            id: roomLabel
+                            text: display
+                            color: "white"
+                            font.bold: roomListView.currentIndex == index
+                            anchors.margins: 2
+                            anchors.leftMargin: 6
+                            anchors.left: parent.left
+                            anchors.right: parent.right
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
+
+                        MouseArea {
+                            anchors.fill: parent
+                            onPressed: {
+                                roomListView.currentIndex = index
+                                tabView.currentIndex = window.getRoom(display)
+                            }
+                        }
                     }
-                    MouseArea {
-                        anchors.fill: parent
-                        cursorShape: Qt.PointingHandCursor
-                        onClicked: tabView.currentIndex = index
+
+                    highlight: Rectangle {
+                        anchors { left: parent.left; right: parent.right }
+                        height: 20
+                        radius: 2
+                        color: "#9c27b0"
                     }
                 }
             }
