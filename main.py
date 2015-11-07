@@ -58,7 +58,7 @@ class Controller(QObject):
         self.engine = QQmlApplicationEngine()
         self.context = self.engine.rootContext()
         self.context.setContextProperty('main', self)
-        #self.context.setContextProperty('roomListModel', self.roomProxy)
+        self.context.setContextProperty('rooms', self.roomProxy)
         self.engine.load(QUrl.fromLocalFile(__file__.replace('.py', '.qml')))
         
         self.window = self.engine.rootObjects()[0]
@@ -74,13 +74,13 @@ class Controller(QObject):
         self.userProxy[roomAlias].sort(0)
     
     def roomName(self, room):
-        if room.name: return room.name
-        if len(room.aliases) > 0: return room.aliases[0]
+        if room.name or room.update_room_name():
+            return room.name
+        if len(room.aliases) > 0 or room.update_aliases():
+            return room.aliases[0]
         return '+'.join(room.members)
     
     def addRoom(self, room):
-        room.update_room_name()
-        room.update_aliases()
         # TODO: update members
         alias = self.roomName(room)
         print("Adding room " + alias)
@@ -129,6 +129,8 @@ class Controller(QObject):
             self.mRoomMessage(room, event)
         elif ty == 'm.typing':
             self.mTyping(room, event)
+        elif ty == 'm.receipt':
+            pass
         else:
             self.window.showMessage(room, "<font color=red>Unhandled message type: " + ty + "</font>")
 
