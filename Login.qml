@@ -12,6 +12,17 @@ Rectangle {
         columns: 1
         rowSpacing: 12
 
+        Item {
+            width: 256
+            height: 256
+            anchors.horizontalCenter: parent.horizontalCenter
+            Image {
+                anchors.fill: parent
+                fillMode: Image.PreserveAspectFit
+                source: "logo.png"
+            }
+        }
+
         Label {
             font.pointSize: 22
             text: "Tensor"
