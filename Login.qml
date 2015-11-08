@@ -8,6 +8,7 @@ Rectangle {
     GridLayout {
         width: parent.width / 2
         anchors.centerIn: parent
+        opacity: 0
 
         columns: 1
         rowSpacing: 12
@@ -45,5 +46,13 @@ Rectangle {
                 passwordField.enabled = false
             }
         }
+
+        NumberAnimation on opacity {
+            id: fadeIn
+            to: 1.0
+            duration: 3000
+        }
+
+        Component.onCompleted: fadeIn.start()
     }
 }

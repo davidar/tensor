@@ -29,6 +29,7 @@ ApplicationWindow {
     }
 
     function addRoom(name, users) {
+        roomList.visible = true
         var i = tabView.count
         tabView.addTab(name, roomTab)
         tabView.currentIndex = i
@@ -72,8 +73,10 @@ ApplicationWindow {
         anchors.fill: parent
 
         Rectangle {
+            id: roomList
             width: parent.width / 5
             color: "#6a1b9a"
+            visible: false
 
             ScrollView {
                 anchors.fill: parent
@@ -122,7 +125,7 @@ ApplicationWindow {
             id: tabView
             Layout.fillWidth: true
             Layout.fillHeight: true
-            style: TabViewStyle { tab: Item {} }
+            style: TabViewStyle { tab:Item{} frame:Item{} frameOverlap:0 }
             Tab { title: "Sign in"; Login{} }
             Room { id: roomTab }
         }
