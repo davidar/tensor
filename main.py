@@ -109,7 +109,6 @@ class Controller(QObject):
         
     @pyqtSlot(str)
     def sendMessage(self, msg):
-        self.window.setStatus("Sending message: " + msg)
         self.rooms[self.window.currentRoom()].send_text(msg)
     
     @pyqtSlot(str,str)
@@ -143,9 +142,9 @@ class Controller(QObject):
     def mTyping(self, room, event):
         ids = event['content']['user_ids']
         if ids:
-            self.window.setStatus("[{}] Currently typing: {}".format(room, ', '.join(ids)))
+            self.window.setStatus(room, " Currently typing: " + ', '.join(ids))
         else:
-            self.window.setStatus('')
+            self.window.setStatus(room, '')
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

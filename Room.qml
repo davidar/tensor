@@ -4,16 +4,20 @@ import QtQuick.Controls.Styles 1.0
 import QtQuick.Layouts 1.0
 
 Component {
-    Column {
+    Item {
         id: room
         Layout.fillWidth: true
 
         property variant users
         function showMessage(s) { textArea.append(s) }
+        function setStatus(s)   { status.text = s }
 
         Item {
-            width: parent.width
-            height: parent.height - textEntry.height
+            id: messages
+            anchors.bottom: statusBox.top
+            anchors.right: parent.right
+            anchors.left: parent.left
+            anchors.top: parent.top
 
             TextArea {
                 id: textArea
@@ -24,9 +28,25 @@ Component {
             }
         }
 
+        Rectangle {
+            id: statusBox
+            anchors.right: parent.right
+            anchors.left: parent.left
+            anchors.bottom: textEntry.top
+            height: status.height + 4
+            color: "white"
+            Label {
+                id: status
+                color: "grey"
+                wrapMode: Text.Wrap
+            }
+        }
+
         TextField {
             id: textEntry
-            width: parent.width
+            anchors.right: parent.right
+            anchors.left: parent.left
+            anchors.bottom: parent.bottom
             focus: true
             placeholderText: "Say something..."
             onAccepted: {
@@ -37,11 +57,8 @@ Component {
             style: TextFieldStyle {
                 background: Rectangle {
                     color: "#eee"
-                    Rectangle {
-                        color: "#eee"
-                        anchors.fill: parent
-                        anchors.margins: -1
-                    }
+                    anchors.fill: parent
+                    anchors.margins: -1
                 }
             }
         }

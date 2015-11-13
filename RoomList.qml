@@ -1,0 +1,72 @@
+import QtQuick 2.0
+import QtQuick.Controls 1.0
+import QtQuick.Controls.Styles 1.0
+
+Rectangle {
+    color: "#6a1b9a"
+
+    Column {
+        anchors.fill: parent
+
+        ScrollView {
+            width: parent.width
+            height: parent.height - textEntry.height
+
+            ListView {
+                id: roomListView
+                model: rooms
+
+                delegate: Rectangle {
+                    width: parent.width
+                    height: Math.max(20, roomLabel.implicitHeight + 4)
+                    color: "transparent"
+
+                    Label {
+                        id: roomLabel
+                        text: display
+                        color: "white"
+                        font.bold: roomListView.currentIndex == index
+                        anchors.margins: 2
+                        anchors.leftMargin: 6
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+
+                    MouseArea {
+                        anchors.fill: parent
+                        onPressed: {
+                            roomListView.currentIndex = index
+                            tabView.currentIndex = window.getRoom(display)
+                        }
+                    }
+                }
+
+                highlight: Rectangle {
+                    anchors { left: parent.left; right: parent.right }
+                    height: 20
+                    radius: 2
+                    color: "#9c27b0"
+                }
+            }
+        }
+
+        TextField {
+            id: textEntry
+            width: parent.width
+            placeholderText: "Join room..."
+            onAccepted: {
+                main.joinRoom(text)
+                text = ""
+            }
+
+            style: TextFieldStyle {
+                background: Rectangle {
+                    color: "#ce93d8"
+                    anchors.fill: parent
+                    anchors.margins: -1
+                }
+            }
+        }
+    }
+}

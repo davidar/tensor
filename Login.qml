@@ -20,7 +20,15 @@ Rectangle {
             Image {
                 anchors.fill: parent
                 fillMode: Image.PreserveAspectFit
+                antialiasing: true
                 source: "logo.png"
+
+                RotationAnimation on rotation {
+                    loops: Animation.Infinite
+                    from: 0
+                    to: 360
+                    duration: 60000
+                }
             }
         }
 
