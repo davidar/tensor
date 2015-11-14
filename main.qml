@@ -3,35 +3,42 @@ import QtQuick.Controls 1.1
 import "qml-matrix-0.3.0.js" as Matrix
 import "secrets.js" as Secrets
 
-ApplicationWindow {
+Rectangle {
     id: window
     visible: true
     width: 640
     height: 480
-    title: "QML Matrix Test"
+    //title: "QML Matrix Test"
+    focus: true
+    color: "#eee"
+
+    Item {
+        anchors.fill: parent
+
+        TextArea {
+            id: textArea
+            anchors.bottom: textField.top
+            anchors.right: parent.right
+            anchors.left: parent.left
+            anchors.top: parent.top
+            readOnly: true
+            textFormat: Qt.RichText
+            text: "<h1>Please wait...</h1>"
+        }
+
+        TextField {
+            id: textField
+            anchors.right: parent.right
+            anchors.left: parent.left
+            anchors.bottom: parent.bottom
+            placeholderText: "Command..."
+        }
+    }
 
     Component.onCompleted: {
         Matrix.global.window = window
+        console.log("Logging in", Secrets.user_id)
         main(Secrets.user_id, Secrets.access_token)
-    }
-
-    TextArea {
-        id: textArea
-        anchors.bottom: textField.top
-        anchors.right: parent.right
-        anchors.left: parent.left
-        anchors.top: parent.top
-        readOnly: true
-        textFormat: Qt.RichText
-        text: "<h1>Please wait...</h1>"
-    }
-
-    TextField {
-        id: textField
-        anchors.right: parent.right
-        anchors.left: parent.left
-        anchors.bottom: parent.bottom
-        placeholderText: "Command..."
     }
 
     function log() {
@@ -39,6 +46,7 @@ ApplicationWindow {
         var s = args[0]
         for(var i = 1; i < args.length; i++)
             s = s.arg(args[i])
+        console.log(s)
         textArea.append(s)
     }
 
@@ -63,6 +71,8 @@ ApplicationWindow {
             accessToken: myAccessToken,
             userId: myUserId
         });
+
+        console.log("Created client");
 
         // Data structures
         var roomList = [];
