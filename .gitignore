@@ -1,0 +1,6 @@
+*.pro.user
+secrets.js
+Makefile
+*.o
+qrc_qml.cpp
+/matrix

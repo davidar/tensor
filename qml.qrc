@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>qml-matrix-0.3.0.js</file>
+        <file>timer.js</file>
+        <file>json2.js</file>
+        <file>secrets.js</file>
+    </qresource>
+</RCC>
