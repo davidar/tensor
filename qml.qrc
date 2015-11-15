@@ -4,6 +4,9 @@
         <file>qml-matrix-0.3.0.js</file>
         <file>timer.js</file>
         <file>json2.js</file>
-        <file>secrets.js</file>
+        <file>Login.qml</file>
+        <file>logo.png</file>
+        <file>Room.qml</file>
+        <file>RoomList.qml</file>
     </qresource>
 </RCC>
