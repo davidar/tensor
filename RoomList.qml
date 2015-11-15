@@ -1,6 +1,5 @@
 import QtQuick 2.0
 import QtQuick.Controls 1.0
-import QtQuick.Controls.Styles 1.0
 
 Rectangle {
     color: "#6a1b9a"
@@ -61,14 +60,6 @@ Rectangle {
             width: parent.width
             placeholderText: "Join room..."
             onAccepted: { joinRoom(text); text = "" }
-
-            style: TextFieldStyle {
-                background: Rectangle {
-                    color: "#ce93d8"
-                    anchors.fill: parent
-                    anchors.margins: -1
-                }
-            }
         }
     }
 }

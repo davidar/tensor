@@ -1,5 +1,5 @@
-import QtQuick 2.2
-import QtQuick.Controls 1.1
+import QtQuick 2.0
+import QtQuick.Controls 1.0
 import QtQuick.Layouts 1.0
 import "qml-matrix-0.3.0.js" as Matrix
 
@@ -18,7 +18,6 @@ Rectangle {
     property var matrixClient: null
     property var roomList: []
     property var viewingRoom: null
-    property int numMessagesToShow: 20
 
     function login(user, pass) {
         console.log("Logging in", user, "...")
@@ -31,6 +30,7 @@ Rectangle {
             }
             user_id = data.user_id
             access_token = data.access_token
+            console.log("Logged in", user_id)
             main()
         });
     }
@@ -206,9 +206,10 @@ Rectangle {
             accessToken: access_token,
             userId: user_id
         });
-        matrixClient.startClient(numMessagesToShow);
+        console.log("Created client")
         room.userInput.connect(handleInput);
         matrixClient.on("syncComplete", function() {
+            console.log("Sync complete!")
             setRoomList();
             if(roomList.length > 0) handleEnterRoom(0);
             else printHelp();
@@ -219,6 +220,10 @@ Rectangle {
                            && !toStartOfTimeline)
                 printLine(event);
         });
+        console.log("Finished init")
+        matrixClient.startClient();
+        console.log("Started client")
+        return;
     }
 
     function setRoomList() {

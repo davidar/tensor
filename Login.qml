@@ -1,4 +1,4 @@
-import QtQuick 2.1
+import QtQuick 2.0
 import QtQuick.Controls 1.0
 import QtQuick.Layouts 1.0
 
@@ -42,9 +42,11 @@ Rectangle {
             }
         }
 
+        Label { id: phantomLabel; visible: false }
+
         Label {
             id: label
-            font.pointSize: 22
+            font.pixelSize: 3 * phantomLabel.font.pixelSize
             text: "Tensor"
             color: "#888"
         }
