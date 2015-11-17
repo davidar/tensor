@@ -22,7 +22,6 @@ Item {
         TextArea {
             id: textArea
             anchors.fill: parent
-            anchors.margins: -1
             readOnly: true
             textFormat: Qt.RichText
         }

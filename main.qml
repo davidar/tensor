@@ -1,7 +1,7 @@
 import QtQuick 2.0
 import QtQuick.Controls 1.0
 import QtQuick.Layouts 1.0
-import "qml-matrix-0.3.0.js" as Matrix
+import "main.js" as Main
 
 Rectangle {
     id: window
@@ -10,9 +10,9 @@ Rectangle {
     height: 480
     focus: true
     color: "#eee"
-    Component.onCompleted: Matrix.global.window = window
+    Component.onCompleted: Main.global.window = window
 
-    property var sdk: Matrix.global.matrixcs
+    property var matrix: Main.global.matrixcs
     property var user_id: null
     property var access_token: null
     property var matrixClient: null
@@ -21,7 +21,7 @@ Rectangle {
 
     function login(user, pass) {
         console.log("Logging in", user, "...")
-        var client = Matrix.global.matrixcs.createClient("https://matrix.org")
+        var client = matrix.createClient("https://matrix.org")
         client.login("m.login.password", {user:user, password:pass}, function(err, data) {
             if(err) {
                 console.error(err)
@@ -126,7 +126,7 @@ Rectangle {
             // get the oldest not sent event.
             var notSentEvent;
             for (var i = 0; i < viewingRoom.timeline.length; i++) {
-                if (viewingRoom.timeline[i].status === sdk.EventStatus.NOT_SENT) {
+                if (viewingRoom.timeline[i].status === matrix.EventStatus.NOT_SENT) {
                     notSentEvent = viewingRoom.timeline[i];
                     break;
                 }
@@ -201,7 +201,7 @@ Rectangle {
     }
 
     function main() {
-        matrixClient = sdk.createClient({
+        matrixClient = matrix.createClient({
             baseUrl: "https://matrix.org",
             accessToken: access_token,
             userId: user_id
@@ -221,7 +221,7 @@ Rectangle {
                 printLine(event);
         });
         console.log("Finished init")
-        matrixClient.startClient();
+        matrixClient.startClient(0);
         console.log("Started client")
         return;
     }
@@ -334,8 +334,8 @@ Rectangle {
 
         if (event.getSender() === user_id) {
             name = "Me";
-            if      (event.status === sdk.EventStatus.SENDING ) fmt = fmtCol('gray');
-            else if (event.status === sdk.EventStatus.NOT_SENT) fmt = fmtCol('red');
+            if      (event.status === matrix.EventStatus.SENDING ) fmt = fmtCol('gray');
+            else if (event.status === matrix.EventStatus.NOT_SENT) fmt = fmtCol('red');
         }
 
         if(event.getType() === "m.room.message") {

@@ -1,6 +1,5 @@
 // Based on http://stackoverflow.com/a/28514691/78204
 
-var global = { window: null };
 var timers = [];
 
 function Timer(id) {
