@@ -21,5 +21,7 @@ Run `./matrix`, fill in your account details, hit enter, and start chatting ;)
 ![](screenshots/android5.png)
 ## KDE 4
 ![](screenshots/kde4.png)
+## OS X
+![](screenshots/osx.png)
 ## Windows 7
 ![](screenshots/windows7.png)
