@@ -9,6 +9,11 @@ RESOURCES += qml.qrc
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =
 
+win32 {
+    LIBS += -LC:/OpenSSL-Win32/lib -lubsec
+    INCLUDEPATH += C:/OpenSSL-Win32/include
+}
+
 # Default rules for deployment.
 include(deployment.pri)
 
