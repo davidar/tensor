@@ -1,9 +1,19 @@
-import QtQuick 2.1
+import QtQuick 2.0
 import QtQuick.Controls 1.0
 import QtQuick.Layouts 1.0
 
 Rectangle {
     color: "#eee"
+    property variant window
+
+    function login() {
+        label.text = "Please wait..."
+        window.login(userNameField.text, passwordField.text)
+        userNameField.enabled = false
+        passwordField.enabled = false
+        userNameField.opacity = 0
+        passwordField.opacity = 0
+    }
 
     GridLayout {
         width: parent.width / 2
@@ -11,7 +21,7 @@ Rectangle {
         opacity: 0
 
         columns: 1
-        rowSpacing: 12
+        rowSpacing: 18
 
         Item {
             width: 256
@@ -32,9 +42,13 @@ Rectangle {
             }
         }
 
+        Label { id: phantomLabel; visible: false }
+
         Label {
-            font.pointSize: 22
+            id: label
+            font.pixelSize: 3 * phantomLabel.font.pixelSize
             text: "Tensor"
+            color: "#888"
         }
 
         TextField {
@@ -48,11 +62,7 @@ Rectangle {
             echoMode: TextInput.Password
             Layout.fillWidth: true
             placeholderText: "Password"
-            onAccepted: {
-                main.login(userNameField.text, passwordField.text)
-                userNameField.enabled = false
-                passwordField.enabled = false
-            }
+            onAccepted: login()
         }
 
         NumberAnimation on opacity {

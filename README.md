@@ -1,29 +1,20 @@
 # Tensor
-PyQt/QML Matrix.org Client
+Cross-platform QML-based [Matrix](https://matrix.org) client
 
 ![](logo.png)
 
-# Prerequisites
-## Debian-based GNU/Linux
+# Building
 
-```sh
-apt-get install 'python3-pyqt5*'
-```
-
-## OSX
-
-```sh
-brew install qt5 python3 pyqt5
-brew install sip --with-python3
-pip3 install html
-```
+- Install [Qt5](http://www.qt.io/download-open-source/)
+- Build according to the instructions for your platform:
+  - Desktop: `qmake && make`
+  - [Android](http://doc.qt.io/qt-5/androidgs.html)
+  - Other platforms: [submit an issue](https://github.com/davidar/tensor/issues) ;)
 
 # Usage
 
-Run `./main.py`, fill in your account details, hit enter, and start chatting ;)
+Run `./matrix`, fill in your account details, hit enter, and start chatting ;)
 
 # Screenshots
 
-![](screen2.png)
-
-![](screen.png)
+![](screenshots/kde4.png)

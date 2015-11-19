@@ -1,9 +1,13 @@
 import QtQuick 2.0
 import QtQuick.Controls 1.0
-import QtQuick.Controls.Styles 1.0
 
 Rectangle {
     color: "#6a1b9a"
+
+    signal enterRoom(int id)
+    signal joinRoom(string name)
+
+    property ListModel rooms
 
     Column {
         anchors.fill: parent
@@ -23,7 +27,7 @@ Rectangle {
 
                     Label {
                         id: roomLabel
-                        text: display
+                        text: room.name
                         color: "white"
                         font.bold: roomListView.currentIndex == index
                         anchors.margins: 2
@@ -37,7 +41,7 @@ Rectangle {
                         anchors.fill: parent
                         onPressed: {
                             roomListView.currentIndex = index
-                            tabView.currentIndex = window.getRoom(display)
+                            enterRoom(index)
                         }
                     }
                 }
@@ -55,18 +59,7 @@ Rectangle {
             id: textEntry
             width: parent.width
             placeholderText: "Join room..."
-            onAccepted: {
-                main.joinRoom(text)
-                text = ""
-            }
-
-            style: TextFieldStyle {
-                background: Rectangle {
-                    color: "#ce93d8"
-                    anchors.fill: parent
-                    anchors.margins: -1
-                }
-            }
+            onAccepted: { joinRoom(text); text = "" }
         }
     }
 }

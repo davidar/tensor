@@ -1,3 +1,6 @@
-[submodule "matrix-python-sdk"]
-	path = matrix-python-sdk
-	url = git@github.com:davidar/matrix-python-sdk.git
+[submodule "matrix-js-sdk"]
+	path = matrix-js-sdk
+	url = https://github.com/matrix-org/matrix-js-sdk.git
+[submodule "qml-request"]
+	path = qml-request
+	url = git@github.com:davidar/qml-request.git

@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>timer.js</file>
+        <file>Login.qml</file>
+        <file>logo.png</file>
+        <file>Room.qml</file>
+        <file>RoomList.qml</file>
+        <file>main.js</file>
+        <file>qml-request/index.js</file>
+        <file>matrix-js-sdk/dist/browser-matrix-dev.js</file>
+    </qresource>
+</RCC>
