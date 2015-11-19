@@ -4,3 +4,6 @@
 [submodule "qml-request"]
 	path = qml-request
 	url = git@github.com:davidar/qml-request.git
+[submodule "universal-components"]
+	path = universal-components
+	url = git@github.com:davidar/universal-components.git

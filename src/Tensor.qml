@@ -1,6 +1,5 @@
 import QtQuick 2.0
-import QtQuick.Controls 1.0
-import QtQuick.Layouts 1.0
+import "../UC"
 import "main.js" as Main
 
 Rectangle {
@@ -57,8 +56,8 @@ Rectangle {
 
             Room {
                 id: room
-                Layout.fillWidth: true
-                Layout.fillHeight: true
+                width: parent.width * 4/5
+                height: parent.height
             }
         }
     }

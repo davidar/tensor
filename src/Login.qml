@@ -1,6 +1,5 @@
 import QtQuick 2.0
-import QtQuick.Controls 1.0
-import QtQuick.Layouts 1.0
+import "../UC"
 
 Rectangle {
     color: "#eee"
@@ -15,13 +14,11 @@ Rectangle {
         passwordField.opacity = 0
     }
 
-    GridLayout {
+    Column {
         width: parent.width / 2
         anchors.centerIn: parent
         opacity: 0
-
-        columns: 1
-        rowSpacing: 18
+        spacing: 18
 
         Item {
             width: 256
@@ -53,14 +50,14 @@ Rectangle {
 
         TextField {
             id: userNameField
-            Layout.fillWidth: true
+            width: parent.width
             placeholderText: "User name"
         }
 
         TextField {
             id: passwordField
             echoMode: TextInput.Password
-            Layout.fillWidth: true
+            width: parent.width
             placeholderText: "Password"
             onAccepted: login()
         }
