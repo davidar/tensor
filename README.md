@@ -21,6 +21,8 @@ Run `./matrix`, fill in your account details, hit enter, and start chatting ;)
 ![](screenshots/android5.png)
 ## Ubuntu Phone
 ![](screenshots/ubuntu-phone.png)
+## SailfishOS
+![](screenshots/sailfish.png)
 ## KDE 4
 ![](screenshots/kde4.png)
 ## OS X

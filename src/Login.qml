@@ -1,8 +1,8 @@
 import QtQuick 2.0
 import "../UC"
 
-Rectangle {
-    color: "#eee"
+Item {
+    //color: "#eee"
     property variant window
 
     function login() {
@@ -18,7 +18,12 @@ Rectangle {
         width: parent.width / 2
         anchors.centerIn: parent
         opacity: 0
-        spacing: 18
+        //spacing: 18
+
+        Item {
+            width: parent.width
+            height: 50
+        }
 
         Item {
             width: 256
@@ -43,7 +48,7 @@ Rectangle {
 
         Label {
             id: label
-            font.pixelSize: 3 * phantomLabel.font.pixelSize
+            font.pixelSize: 2 * phantomLabel.font.pixelSize
             text: "Tensor"
             color: "#888"
         }

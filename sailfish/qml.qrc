@@ -1,0 +1,39 @@
+<RCC>
+    <qresource prefix="/">
+        <file>UC/ApplicationWindow.qml</file>
+        <file>UC/BackgroundRectangle.qml</file>
+        <file>UC/Button.qml</file>
+        <file>UC/ComboBox.qml</file>
+        <file>UC/Dialog.qml</file>
+        <file>UC/IconButton.qml</file>
+        <file>UC/Label.qml</file>
+        <file>UC/Menu.qml</file>
+        <file>UC/MenuItem.qml</file>
+        <file>UC/Page.qml</file>
+        <file>UC/PageHeader.qml</file>
+        <file>UC/PlatformFlickable.qml</file>
+        <file>UC/PlatformListView.qml</file>
+        <file>UC/Popup.qml</file>
+        <file>UC/ProgressBar.qml</file>
+        <file>UC/Screen.qml</file>
+        <file>UC/SearchField.qml</file>
+        <file>UC/Slider.qml</file>
+        <file>UC/Switch.qml</file>
+        <file>UC/TextArea.qml</file>
+        <file>UC/TextField.qml</file>
+        <file>UC/TextSwitch.qml</file>
+        <file>UC/TopMenu.qml</file>
+        <file>UC/VerticalScrollDecorator.qml</file>
+        <file>matrix-js-sdk/dist/browser-matrix-dev.js</file>
+        <file>qml-request/index.js</file>
+        <file>src/Login.qml</file>
+        <file>src/main.js</file>
+        <file>src/Room.qml</file>
+        <file>src/RoomList.qml</file>
+        <file>src/Tensor.qml</file>
+        <file>src/timer.js</file>
+        <file>src/logo.png</file>
+        <file>UC/SplitView.qml</file>
+        <file>UC/ScrollView.qml</file>
+    </qresource>
+</RCC>

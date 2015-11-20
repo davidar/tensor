@@ -2,13 +2,13 @@ import QtQuick 2.0
 import "../UC"
 import "main.js" as Main
 
-Rectangle {
+Item {
     id: window
     visible: true
     width: 800
     height: 480
     focus: true
-    color: "#eee"
+    //color: "#eee"
     Component.onCompleted: Main.global.window = window
 
     property var matrix: Main.global.matrixcs
