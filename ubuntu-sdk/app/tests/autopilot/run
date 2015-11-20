@@ -1,0 +1,11 @@
+#!/bin/bash
+
+if [[ -z `which autopilot3` ]]; then
+  echo "python3-autopilot is not installed. Skip"
+  exit
+fi
+
+SCRIPTPATH=`dirname $0`
+pushd ${SCRIPTPATH}
+autopilot3 run ubuntu-sdk
+popd

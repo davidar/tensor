@@ -9,6 +9,11 @@ Rectangle {
 
     property ListModel rooms
 
+    function refresh() {
+        if(roomListView.visible)
+            roomListView.forceLayout()
+    }
+
     Column {
         anchors.fill: parent
 
@@ -19,6 +24,7 @@ Rectangle {
             ListView {
                 id: roomListView
                 model: rooms
+                anchors.fill: parent
 
                 delegate: Rectangle {
                     width: parent.width

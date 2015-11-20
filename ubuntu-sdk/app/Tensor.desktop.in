@@ -1,0 +1,11 @@
+[Desktop Entry]
+_Name=Tensor
+Comment=Matrix client
+Exec=@EXEC@
+Icon=@ICON@
+Terminal=false
+Type=Application
+X-Ubuntu-Touch=true
+
+
+

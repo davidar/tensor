@@ -1,0 +1,15 @@
+{
+    "name": "@APP_ID@",
+    "description": "Matrix client",
+    "architecture": "@CLICK_ARCH@",
+    "title": "@APP_NAME@",
+    "hooks": {
+        "Tensor": {
+            "apparmor": "Tensor.apparmor",
+            "desktop": "Tensor.desktop"
+        }
+    },
+    "version": "0.1",
+    "maintainer": "David A Roberts <d@vidr.cc>",
+    "framework": "ubuntu-sdk-14.04-qml"
+}

@@ -1,4 +1,4 @@
-*.pro.user
+*.user
 secrets.js
 Makefile
 *.o

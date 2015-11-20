@@ -241,6 +241,7 @@ Rectangle {
         roomListModel.clear();
         for(var i = 0; i < roomList.length; i++)
             roomListModel.append({ room: roomList[i] })
+        roomListItem.refresh();
     }
 
     function printHelp() {
