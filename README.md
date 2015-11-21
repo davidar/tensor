@@ -17,6 +17,7 @@ Cross-platform QML-based [Matrix](https://matrix.org) client
 Run `./matrix`, fill in your account details, hit enter, and start chatting ;)
 
 # Screenshots
+![](screenshots/all.png)
 ## Android Lollipop
 ![](screenshots/android5.png)
 ## Ubuntu Phone
