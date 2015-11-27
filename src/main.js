@@ -22,7 +22,7 @@ function include(files, init) {
 
 include([ "timer.js"
         , "../qml-request/index.js"
-        , "../matrix-js-sdk/dist/browser-matrix-dev.js"
+        , "../matrix-js-sdk/dist/0.3.0/browser-matrix-0.3.0.js"
         ], function() {
     console.log("Initialising")
     global.matrixcs.request(request)

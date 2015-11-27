@@ -39,5 +39,6 @@
         <file>UC/menu.svg</file>
         <file>UC/qmldir</file>
         <file>UC/SplitView.qml</file>
+        <file>matrix-js-sdk/dist/0.3.0/browser-matrix-0.3.0.js</file>
     </qresource>
 </RCC>
