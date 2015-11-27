@@ -2,16 +2,15 @@ import QtQuick 2.0
 import "../UC"
 import "main.js" as Main
 
-Item {
+Rectangle {
     id: window
     visible: true
     width: 800
     height: 480
     focus: true
-    //color: "#eee"
-    Component.onCompleted: Main.global.window = window
+    color: "#eee"
 
-    property var matrix: Main.global.matrixcs
+    property var matrix: null
     property var user_id: null
     property var access_token: null
     property var matrixClient: null
@@ -19,6 +18,9 @@ Item {
     property var viewingRoom: null
 
     function login(user, pass) {
+        Main.global.window = window
+        window.matrix = Main.global.matrixcs
+
         console.log("Logging in", user, "...")
         var client = matrix.createClient("https://matrix.org")
         client.login("m.login.password", {user:user, password:pass}, function(err, data) {
