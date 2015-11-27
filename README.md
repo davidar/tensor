@@ -1,7 +1,7 @@
 # Tensor
 Cross-platform QML-based [Matrix](https://matrix.org) client
 
-![](src/logo.png)
+![](screenshots/all.png)
 
 # Building
 - Clone submodules: `git submodule init && git submodule update`
@@ -17,7 +17,6 @@ Cross-platform QML-based [Matrix](https://matrix.org) client
 Run `./matrix`, fill in your account details, hit enter, and start chatting ;)
 
 # Screenshots
-![](screenshots/all.png)
 ## Android Lollipop
 ![](screenshots/android5.png)
 ## Ubuntu Phone
