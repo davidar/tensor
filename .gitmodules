@@ -3,7 +3,7 @@
 	url = https://github.com/matrix-org/matrix-js-sdk.git
 [submodule "qml-request"]
 	path = qml-request
-	url = git@github.com:davidar/qml-request.git
+	url = https://github.com/davidar/qml-request.git
 [submodule "universal-components"]
 	path = universal-components
-	url = git@github.com:davidar/universal-components.git
+	url = https://github.com/davidar/universal-components.git
