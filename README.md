@@ -28,3 +28,5 @@ Run `./matrix`, fill in your account details, hit enter, and start chatting ;)
 ![](screenshots/osx.png)
 ## Windows 7
 ![](screenshots/windows7.png)
+## Methane Browser
+![](screenshots/methane-browser.png)
