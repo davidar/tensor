@@ -4,7 +4,7 @@ Cross-platform QML-based [Matrix](https://matrix.org) client
 ![](screenshots/all.png)
 
 # Building
-- Clone submodules: `git submodule update --init`
+- Clone submodules: `git submodule update --init` (or `git clone --recursive` this repo)
 - Install [Qt5](http://www.qt.io/download-open-source/)
 - Build according to the instructions for your platform:
   - Desktop: `qmake && make` (or build with [Qt Creator](http://www.qt.io/ide/))
@@ -13,7 +13,7 @@ Cross-platform QML-based [Matrix](https://matrix.org) client
   - Other platforms: [submit an issue](https://github.com/davidar/tensor/issues) ;)
 
 # Usage
-Run `./matrix`, fill in your account details, hit enter, and start chatting ;)
+Run `./matrix`, fill in your account details, hit enter, join the `#tensor:matrix.org` room, and start chatting ;)
 
 # Screenshots
 ## Android Lollipop
