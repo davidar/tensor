@@ -13,7 +13,7 @@ Cross-platform QML-based [Matrix](https://matrix.org) client
   - Other platforms: [submit an issue](https://github.com/davidar/tensor/issues) ;)
 
 # Usage
-Run `./matrix`, fill in your account details, hit enter, join the `#tensor:matrix.org` room, and start chatting ;)
+Run `./tensor`, fill in your account details, hit enter, join the `#tensor:matrix.org` room, and start chatting ;)
 
 # Screenshots
 ## Android Lollipop
