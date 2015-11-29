@@ -1,5 +1,5 @@
 # Tensor
-Cross-platform QML-based [Matrix](https://matrix.org) client
+Tensor is a cross-platform native [Matrix](https://matrix.org) client, based on [QtQuick/QML](http://www.qt.io/qt-quick/) and [matrix-js-sdk](https://github.com/matrix-org/matrix-js-sdk).
 
 ![](screenshots/all.png)
 
