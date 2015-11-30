@@ -7,7 +7,7 @@ Rectangle {
     signal enterRoom(int id)
     signal joinRoom(string name)
 
-    property ListModel rooms
+    property variant rooms
 
     function refresh() {
         if(roomListView.visible)
@@ -17,47 +17,44 @@ Rectangle {
     Column {
         anchors.fill: parent
 
-        ScrollView {
+        ListView {
+            id: roomListView
+            model: rooms
             width: parent.width
             height: parent.height - textEntry.height
 
-            ListView {
-                id: roomListView
-                model: rooms
-                anchors.fill: parent
+            delegate: Rectangle {
+                width: parent.width
+                height: Math.max(20, roomLabel.implicitHeight + 4)
+                color: "transparent"
 
-                delegate: Rectangle {
-                    width: parent.width
-                    height: Math.max(20, roomLabel.implicitHeight + 4)
-                    color: "transparent"
-
-                    Label {
-                        id: roomLabel
-                        text: room.name
-                        color: "white"
-                        font.bold: roomListView.currentIndex == index
-                        anchors.margins: 2
-                        anchors.leftMargin: 6
-                        anchors.left: parent.left
-                        anchors.right: parent.right
-                        anchors.verticalCenter: parent.verticalCenter
-                    }
-
-                    MouseArea {
-                        anchors.fill: parent
-                        onPressed: {
-                            roomListView.currentIndex = index
-                            enterRoom(index)
-                        }
-                    }
+                Label {
+                    id: roomLabel
+                    text: rooms[index].name
+                    color: "white"
+                    elide: Text.ElideRight
+                    font.bold: roomListView.currentIndex == index
+                    anchors.margins: 2
+                    anchors.leftMargin: 6
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.verticalCenter: parent.verticalCenter
                 }
 
-                highlight: Rectangle {
-                    anchors { left: parent.left; right: parent.right }
-                    height: 20
-                    radius: 2
-                    color: "#9c27b0"
+                MouseArea {
+                    anchors.fill: parent
+                    onPressed: {
+                        roomListView.currentIndex = index
+                        enterRoom(index)
+                    }
                 }
+            }
+
+            highlight: Rectangle {
+                anchors { left: parent.left; right: parent.right }
+                height: 20
+                radius: 2
+                color: "#9c27b0"
             }
         }
 

@@ -5,10 +5,16 @@ Item {
     id: room
 
     signal userInput(string text)
+    signal loadBacklog()
 
-    function showMessage(s) { textArea.append(s) }
-    function clearLog()     { textArea.text = '' }
-    function clearInput()   { textEntry.text = '' }
+    function show(s) {
+        textArea.text = s
+        flickable.contentY = textArea.height - flickable.height
+        if(textArea.height <= flickable.height) loadBacklog()
+    }
+    function clearInput() {
+        textEntry.text = ''
+    }
 
     Item {
         id: messages
@@ -17,11 +23,21 @@ Item {
         anchors.left: parent.left
         anchors.top: parent.top
 
-        TextArea {
-            id: textArea
+        Flickable {
+            id: flickable
             anchors.fill: parent
-            readOnly: true
-            textFormat: Qt.RichText
+            contentWidth: width
+            contentHeight: textArea.height
+            onAtYBeginningChanged: {
+                if(textArea.height > flickable.height && atYBeginning) loadBacklog()
+            }
+            Text {
+                id: textArea
+                width: parent.width
+                textFormat: Qt.RichText
+                wrapMode: Text.Wrap
+                text: "Nothing to see here..."
+            }
         }
     }
 

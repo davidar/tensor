@@ -18,11 +18,11 @@ Item {
         width: parent.width / 2
         anchors.centerIn: parent
         opacity: 0
-        //spacing: 18
+        spacing: 18
 
         Item {
             width: parent.width
-            height: 50
+            height: 1
         }
 
         Item {
@@ -48,7 +48,7 @@ Item {
 
         Label {
             id: label
-            font.pixelSize: 2 * phantomLabel.font.pixelSize
+            font.pixelSize: phantomLabel.font.pixelSize * 5/2
             text: "Tensor"
             color: "#888"
         }

@@ -3,4 +3,4 @@ secrets.js
 Makefile
 *.o
 qrc_qml.cpp
-/matrix
+/tensor
