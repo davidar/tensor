@@ -51,7 +51,6 @@ Rectangle {
             }
 
             highlight: Rectangle {
-                anchors { left: parent.left; right: parent.right }
                 height: 20
                 radius: 2
                 color: "#9c27b0"
