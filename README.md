@@ -3,13 +3,20 @@ Tensor is a cross-platform native [Matrix](https://matrix.org) client, based on 
 
 ![](screenshots/all.png)
 
-# Building
-- Clone submodules: `git submodule update --init` (or `git clone --recursive` this repo)
-- Install [Qt5](http://www.qt.io/download-open-source/)
-- Build according to the instructions for your platform:
-  - Desktop: `qmake && make` (or build with [Qt Creator](http://www.qt.io/ide/))
-    - Windows: make sure [OpenSSL](https://slproweb.com/products/Win32OpenSSL.html) is installed
-  - [Android](http://doc.qt.io/qt-5/androidgs.html)
+# Build Instructions
+1. Clone Git submodules: `git submodule update --init` (or `git clone --recursive`) from within the repo's folder.
+2. Install [Qt5](http://www.qt.io/download-open-source/) if you don't have it already, then fetch your distribution's flavor of these packages: (for the sake of simplicity, the Ubuntu/Debian edition of the required packages will be listed here)
+  - qt5-default
+  - qt5-qmake
+  - qtdeclarative5-dev
+  - qtdeclarative5-controls-plugin
+3. Build according to the instructions for your platform:
+  - Linux:
+    - `qmake && make` (or build with [Qt Creator](http://www.qt.io/ide/))
+  - Windows:
+    - make sure [OpenSSL](https://slproweb.com/products/Win32OpenSSL.html) is installed.
+  - Android:
+    - http://doc.qt.io/qt-5/androidgs.html
   - Other platforms: [submit an issue](https://github.com/davidar/tensor/issues) ;)
 
 # Usage
