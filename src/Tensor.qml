@@ -102,13 +102,19 @@ Rectangle {
                 height: parent.height
                 rooms: []
 
-                function update() {
-                    rooms = matrixClient.getRooms();
+                function update(lazy) {
+                    var matrixRooms = matrixClient.getRooms()
+                    if(lazy !== true || rooms.length !== matrixRooms.length) {
+                        console.log("Updating rooms...")
+                        rooms = matrixRooms
+                    }
+                    return matrixRooms
                 }
 
                 Component.onCompleted: {
                     enterRoom.connect(function(roomIndex) {
-                        viewingRoom = rooms[roomIndex]
+                        var roomsList = update(true)
+                        viewingRoom = roomsList[roomIndex]
                         if(viewingRoom.getMember(user_id).membership === "invite")
                             joinRoom(viewingRoom.roomId)
                         printMessages()
