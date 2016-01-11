@@ -30,24 +30,23 @@
 
 import QtQuick 2.0
 import Sailfish.Silica 1.0
+import "qrc:/src"
 
 CoverBackground {
+    Image {
+        source: Qt.resolvedUrl("qrc:/src/logo.png")
+        opacity: 40
+
+        height: 450
+        width: 450
+        anchors.top: parent.top
+        anchors.left: parent.left
+    }
+
     Label {
         id: label
         anchors.centerIn: parent
         text: qsTr("Tensor")
-    }
-
-    CoverActionList {
-        id: coverAction
-
-        CoverAction {
-            iconSource: "image://theme/icon-cover-next"
-        }
-
-        CoverAction {
-            iconSource: "image://theme/icon-cover-pause"
-        }
     }
 }
 

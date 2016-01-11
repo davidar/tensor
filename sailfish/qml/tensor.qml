@@ -38,15 +38,13 @@ ApplicationWindow
     initialPage: Component {
         Page {
             id: page
-            allowedOrientations: Orientation.Landscape
+            allowedOrientations: Orientation.All
             Tensor {
                 anchors.fill: parent
             }
         }
     }
     cover: Qt.resolvedUrl("cover/CoverPage.qml")
-    allowedOrientations: Orientation.All
-    _defaultPageOrientations: Orientation.All
 }
 
 
