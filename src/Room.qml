@@ -8,8 +8,18 @@ Item {
     signal loadBacklog()
 
     function show(s) {
+        var oldContentY = flickable.contentY
+        var oldTextHeight = textArea.height
+        var wasAtEnd = flickable.atYEnd
         textArea.text = s
-        flickable.contentY = textArea.height - flickable.height
+        if(wasAtEnd) {
+            flickable.contentY = textArea.height - flickable.height
+        }
+        else
+        {
+            flickable.contentY = oldContentY + textArea.height - oldTextHeight
+        }
+
         if(textArea.height <= flickable.height) loadBacklog()
     }
     function clearInput() {
