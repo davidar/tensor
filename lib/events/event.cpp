@@ -81,33 +81,22 @@ QString Event::originalJson() const
     return d->originalJson;
 }
 
+#define DISPATCH_EVENT_TYPE(name__,type__) \
+    if( obj.value("type").toString() == name__ ) \
+    { \
+        return type__::fromJson(obj); \
+    } \
+
+
 Event* Event::fromJson(const QJsonObject& obj)
 {
     //qDebug() << obj.value("type").toString();
-    if( obj.value("type").toString() == "m.room.message" )
-    {
-        return RoomMessageEvent::fromJson(obj);
-    }
-    if( obj.value("type").toString() == "m.room.name" )
-    {
-        return RoomNameEvent::fromJson(obj);
-    }
-    if( obj.value("type").toString() == "m.room.aliases" )
-    {
-        return RoomAliasesEvent::fromJson(obj);
-    }
-    if( obj.value("type").toString() == "m.room.canonical_alias" )
-    {
-        return RoomCanonicalAliasEvent::fromJson(obj);
-    }
-    if( obj.value("type").toString() == "m.room.member" )
-    {
-        return RoomMemberEvent::fromJson(obj);
-    }
-    if( obj.value("type").toString() == "m.room.topic" )
-    {
-        return RoomTopicEvent::fromJson(obj);
-    }
+    DISPATCH_EVENT_TYPE("m.room.message", RoomMessageEvent);
+    DISPATCH_EVENT_TYPE("m.room.name", RoomNameEvent);
+    DISPATCH_EVENT_TYPE("m.room.aliases", RoomAliasesEvent);
+    DISPATCH_EVENT_TYPE("m.room.canonical_alias", RoomCanonicalAliasEvent);
+    DISPATCH_EVENT_TYPE("m.room.member", RoomMemberEvent);
+    DISPATCH_EVENT_TYPE("m.room.topic", RoomTopicEvent);
     if( obj.value("type").toString() == "m.typing" )
     {
         qDebug() << "m.typing...";

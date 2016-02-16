@@ -124,7 +124,7 @@ void BaseJob::gotReply()
 {
     if( d->reply->error() != QNetworkReply::NoError )
     {
-        qDebug() << "NetworkError!!!";
+        qDebug() << "NetworkError!!!" << d->reply->error();
         fail( NetworkError, d->reply->errorString() );
         return;
     }
