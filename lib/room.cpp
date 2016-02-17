@@ -71,7 +71,7 @@ Room::Room(Connection* connection, QString id)
     d->connection = connection;
     d->joinState = JoinState::Join;
     d->gettingNewContent = false;
-    qDebug() << "New Room: " << id;
+    qDebug() << "New Room:" << id;
 
     //connection->getMembers(this); // I don't think we need this anymore in r0.0.1
 }
@@ -265,7 +265,7 @@ void Room::Private::gotMessages(KJob* job)
         qDebug() << realJob->errorString();
     }
     else
-    {
+        {
         for( Event* event: realJob->events() )
         {
             q->processMessageEvent(event);
@@ -301,7 +301,7 @@ void Room::processStateEvent(Event* event)
         if (RoomNameEvent* nameEvent = static_cast<RoomNameEvent*>(event))
         {
             d->name = nameEvent->name();
-            qDebug() << "room name: " << d->name;
+            qDebug() << "room name:" << d->name;
             emit namesChanged(this);
         } else
         {
@@ -313,14 +313,14 @@ void Room::processStateEvent(Event* event)
     {
         RoomAliasesEvent* aliasesEvent = static_cast<RoomAliasesEvent*>(event);
         d->aliases = aliasesEvent->aliases();
-        qDebug() << "room aliases: " << d->aliases;
+        qDebug() << "room aliases:" << d->aliases;
         emit namesChanged(this);
     }
     if( event->type() == EventType::RoomCanonicalAlias )
     {
         RoomCanonicalAliasEvent* aliasEvent = static_cast<RoomCanonicalAliasEvent*>(event);
         d->canonicalAlias = aliasEvent->alias();
-        qDebug() << "room canonical alias: " << d->canonicalAlias;
+        qDebug() << "room canonical alias:" << d->canonicalAlias;
         emit namesChanged(this);
     }
     if( event->type() == EventType::RoomTopic )
@@ -365,13 +365,13 @@ void Room::processEphemeralEvent(Event* event)
     {
         ReceiptEvent* receiptEvent = static_cast<ReceiptEvent*>(event);
         for( QString eventId: receiptEvent->events() )
-        {
+    {
             QList<Receipt> receipts = receiptEvent->receiptsForEvent(eventId);
             for( Receipt r: receipts )
-            {
+        {
                 d->lastReadEvent.insert(d->connection->user(r.userId), eventId);
-            }
         }
+    }
     }
 }
 
