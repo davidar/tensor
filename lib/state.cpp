@@ -59,9 +59,9 @@ QString State::replacesState() const
 
 State* State::fromJson(const QJsonObject& obj)
 {
-    Event* event = Event::fromJson(obj);
+    Event* event = makeEventFrom(obj);
     if( !event )
-        return 0;
+        return nullptr;
     State* state = new State(event);
     state->d->stateKey = obj.value("state_key").toString();
     state->d->replacesState = obj.value("replaces_state").toString();

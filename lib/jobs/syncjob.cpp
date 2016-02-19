@@ -143,6 +143,7 @@ void SyncJob::parseJson(const QJsonDocument& data)
 SyncRoomData::SyncRoomData(QString roomId_, const QJsonObject& room_, JoinState joinState_)
     : roomId(roomId_), joinState(joinState_)
 {
+    // Iterate through event types and fill the respective QList<> fields.
     const QList<QPair<QString, QList<Event *> *> > eventLists = {
         { "state", &state },
         { "timeline", &timeline },
@@ -154,8 +155,13 @@ SyncRoomData::SyncRoomData(QString roomId_, const QJsonObject& room_, JoinState 
         QJsonArray array = room_.value(elist.first).toObject().value("events").toArray();
         for( QJsonValue val: array )
         {
-            if ( Event* event = Event::fromJson(val.toObject()) )
+            if( Event* event = makeEventFrom(val.toObject()) )
                 elist.second->append(event);
+            else
+            {
+                qDebug() << "Failed to create Event from JSON:";
+                qDebug().noquote() << val;
+            }
         }
     }
 

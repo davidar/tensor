@@ -44,8 +44,6 @@ namespace QMatrixClient
             // only for debug purposes!
             QString originalJson() const;
 
-            static Event* fromJson(const QJsonObject& obj);
-            
         protected:
             bool parseJson(const QJsonObject& obj);
         
@@ -53,6 +51,8 @@ namespace QMatrixClient
             class Private;
             Private* d;
     };
+
+    Event* makeEventFrom(const QJsonObject& obj);
 }
 
 #endif // QMATRIXCLIENT_EVENT_H

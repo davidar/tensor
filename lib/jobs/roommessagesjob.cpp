@@ -87,7 +87,7 @@ void RoomMessagesJob::parseJson(const QJsonDocument& data)
     QJsonArray chunk = obj.value("chunk").toArray();
     for( const QJsonValue& val: chunk )
     {
-        Event* event = Event::fromJson(val.toObject());
+        Event* event = makeEventFrom(val.toObject());
         d->events.append(event);
     }
     d->end = obj.value("end").toString();

@@ -81,32 +81,39 @@ QString Event::originalJson() const
     return d->originalJson;
 }
 
-#define DISPATCH_EVENT_TYPE(name__,type__) \
-    if( obj.value("type").toString() == name__ ) \
-    { \
-        return type__::fromJson(obj); \
-    } \
+Event *makeEvent(const QJsonObject &obj)
+{
+    return UnknownEvent::fromJson(obj);
+}
+
+template <typename StrT, typename EvProducerT, typename... EvProducers>
+Event *makeEvent(const QJsonObject &obj,
+        StrT eventTypeStr, EvProducerT evProducer,
+        EvProducers... otherProducers)
+{
+    if( obj.value("type").toString() == eventTypeStr )
+        return evProducer(obj);
+    return makeEvent(obj, otherProducers...);
+}
 
 
-Event* Event::fromJson(const QJsonObject& obj)
+Event* QMatrixClient::makeEventFrom(const QJsonObject& obj)
 {
     //qDebug() << obj.value("type").toString();
-    DISPATCH_EVENT_TYPE("m.room.message", RoomMessageEvent);
-    DISPATCH_EVENT_TYPE("m.room.name", RoomNameEvent);
-    DISPATCH_EVENT_TYPE("m.room.aliases", RoomAliasesEvent);
-    DISPATCH_EVENT_TYPE("m.room.canonical_alias", RoomCanonicalAliasEvent);
-    DISPATCH_EVENT_TYPE("m.room.member", RoomMemberEvent);
-    DISPATCH_EVENT_TYPE("m.room.topic", RoomTopicEvent);
-    if( obj.value("type").toString() == "m.typing" )
-    {
-        return TypingEvent::fromJson(obj);
-    }
-    if( obj.value("type").toString() == "m.receipt" )
-    {
-        return ReceiptEvent::fromJson(obj);
-    }
-    //qDebug() << "Unknown event";
-    return UnknownEvent::fromJson(obj);
+    return
+        makeEvent(obj
+            , "m.room.message", RoomMessageEvent::fromJson
+            , "m.room.name", RoomNameEvent::fromJson
+            , "m.room.aliases", RoomAliasesEvent::fromJson
+            , "m.room.name", RoomNameEvent::fromJson
+            , "m.room.aliases", RoomAliasesEvent::fromJson
+            , "m.room.canonical_alias", RoomCanonicalAliasEvent::fromJson
+            , "m.room.member", RoomMemberEvent::fromJson
+            , "m.room.topic", RoomTopicEvent::fromJson
+            , "m.typing", TypingEvent::fromJson
+            , "m.receipt", ReceiptEvent::fromJson
+            /* Insert new event types BEFORE this line */
+        );
 }
 
 bool Event::parseJson(const QJsonObject& obj)
