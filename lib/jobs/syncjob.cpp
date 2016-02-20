@@ -144,7 +144,7 @@ SyncRoomData::SyncRoomData(QString roomId_, const QJsonObject& room_, JoinState 
     : roomId(roomId_), joinState(joinState_)
 {
     // Iterate through event types and fill the respective QList<> fields.
-    const QList<QPair<QString, QList<Event *> *> > eventLists = {
+    const QList<QPair<const QString, QList<Event *> *> > eventLists = {
         { "state", &state },
         { "timeline", &timeline },
         { "ephemeral", &ephemeral },
@@ -152,17 +152,9 @@ SyncRoomData::SyncRoomData(QString roomId_, const QJsonObject& room_, JoinState 
     };
 
     for (auto elist: eventLists) {
-        QJsonArray array = room_.value(elist.first).toObject().value("events").toArray();
-        for( QJsonValue val: array )
-        {
-            if( Event* event = makeEventFrom(val.toObject()) )
-                elist.second->append(event);
-            else
-            {
-                qDebug() << "Failed to create Event from JSON:";
-                qDebug().noquote() << val;
-            }
-        }
+        appendEventsFromJson(
+            room_.value(elist.first).toObject().value("events").toArray(),
+            elist.second);
     }
 
     QJsonObject timeline = room_.value("timeline").toObject();

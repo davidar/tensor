@@ -84,12 +84,7 @@ QUrlQuery RoomMessagesJob::query()
 void RoomMessagesJob::parseJson(const QJsonDocument& data)
 {
     QJsonObject obj = data.object();
-    QJsonArray chunk = obj.value("chunk").toArray();
-    for( const QJsonValue& val: chunk )
-    {
-        Event* event = makeEventFrom(val.toObject());
-        d->events.append(event);
-    }
+    appendEventsFromJson(obj.value("chunk").toArray(), &d->events);
     d->end = obj.value("end").toString();
     emitResult();
 }

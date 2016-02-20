@@ -53,6 +53,7 @@ namespace QMatrixClient
     };
 
     Event* makeEventFrom(const QJsonObject& obj);
+    void appendEventsFromJson(const QJsonArray& array, QList<Event *> *evlist);
 }
 
 #endif // QMATRIXCLIENT_EVENT_H

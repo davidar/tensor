@@ -116,6 +116,20 @@ Event* QMatrixClient::makeEventFrom(const QJsonObject& obj)
         );
 }
 
+void appendEventsFromJson(const QJsonArray &array, QList<Event *> *evlist)
+{
+    for( QJsonValue val: array )
+    {
+        if( Event* event = makeEventFrom(val.toObject()) )
+            evlist->append(event);
+        else
+        {
+            qDebug() << "Failed to create Event from JSON:";
+            qDebug().noquote() << val;
+        }
+    }
+}
+
 bool Event::parseJson(const QJsonObject& obj)
 {
     d->originalJson = QString::fromUtf8(QJsonDocument(obj).toJson());
