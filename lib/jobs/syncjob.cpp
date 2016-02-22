@@ -144,7 +144,7 @@ SyncRoomData::SyncRoomData(QString roomId_, const QJsonObject& room_, JoinState 
     : roomId(roomId_), joinState(joinState_)
 {
     // Iterate through event types and fill the respective QList<> fields.
-    const QList<QPair<const QString, QList<Event *> *> > eventLists = {
+    const QList<QPair<QString, QList<Event *> *> > eventLists {
         { "state", &state },
         { "timeline", &timeline },
         { "ephemeral", &ephemeral },

@@ -20,6 +20,7 @@
 
 #include <QtCore/QJsonObject>
 #include <QtCore/QJsonDocument>
+#include <QtCore/QJsonArray>
 #include <QtCore/QDateTime>
 #include <QtCore/QDebug>
 
@@ -116,7 +117,7 @@ Event* QMatrixClient::makeEventFrom(const QJsonObject& obj)
         );
 }
 
-void appendEventsFromJson(const QJsonArray &array, QList<Event *> *evlist)
+void QMatrixClient::appendEventsFromJson(const QJsonArray &array, QList<Event *> *evlist)
 {
     for( QJsonValue val: array )
     {
