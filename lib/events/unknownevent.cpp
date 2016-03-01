@@ -21,6 +21,8 @@
 #include <QtCore/QJsonDocument>
 #include <QtCore/QDebug>
 
+#include "../logging_util.h"
+
 using namespace QMatrixClient;
 
 class UnknownEvent::Private
@@ -58,6 +60,6 @@ UnknownEvent* UnknownEvent::fromJson(const QJsonObject& obj)
     e->d->type = obj.value("type").toString();
     e->d->content = QString::fromUtf8(QJsonDocument(obj).toJson());
     qDebug() << "UnknownEvent, JSON follows:";
-    qDebug().noquote() << obj;
+    qDebug() << formatJson << obj;
     return e;
 }

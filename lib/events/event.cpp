@@ -24,6 +24,7 @@
 #include <QtCore/QDateTime>
 #include <QtCore/QDebug>
 
+#include "../logging_util.h"
 #include "roommessageevent.h"
 #include "roomnameevent.h"
 #include "roomaliasesevent.h"
@@ -126,7 +127,7 @@ void QMatrixClient::appendEventsFromJson(const QJsonArray &array, QList<Event *>
         else
         {
             qDebug() << "Failed to create Event from JSON:";
-            qDebug().noquote() << val;
+            qDebug() << formatJson << val;
         }
     }
 }
@@ -143,7 +144,7 @@ bool Event::parseJson(const QJsonObject& obj)
         } else {
             correct = false;
             qDebug() << "Event: can't find event_id";
-            qDebug().noquote() << obj;
+            qDebug() << formatJson << obj;
         }
         if( obj.contains("origin_server_ts") )
         {
@@ -152,7 +153,7 @@ bool Event::parseJson(const QJsonObject& obj)
         } else {
             correct = false;
             qDebug() << "Event: can't find ts";
-            qDebug().noquote() << obj;
+            qDebug() << formatJson << obj;
         }
     }
     if( obj.contains("room_id") )
