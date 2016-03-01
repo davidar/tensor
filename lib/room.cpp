@@ -332,21 +332,25 @@ void Room::processStateEvent(Event* event)
     if( event->type() == EventType::RoomMember )
     {
         RoomMemberEvent* memberEvent = static_cast<RoomMemberEvent*>(event);
-        User* u = d->connection->user(memberEvent->userId());
-        if( !u ) qDebug() << "addState: invalid user!" << u << memberEvent->userId();
-        u->processEvent(event);
-        if( memberEvent->membership() == MembershipType::Join and !d->users.contains(u) )
+        if (User* u = d->connection->user(memberEvent->userId()))
         {
+            u->processEvent(event);
+        if( memberEvent->membership() == MembershipType::Join and !d->users.contains(u) )
+            {
             d->users.append(u);
             emit userAdded(u);
-        }
-        else if( memberEvent->membership() == MembershipType::Leave
+            }
+            else if( memberEvent->membership() == MembershipType::Leave
                  and d->users.contains(u) )
-        {
+            {
             d->users.removeAll(u);
             emit userRemoved(u);
+            }
         }
+        else
+            qDebug() << "addState: invalid user!" << memberEvent->userId();
     }
+
 }
 
 void Room::processEphemeralEvent(Event* event)
