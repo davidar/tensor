@@ -26,9 +26,8 @@
 
 LoginDialog::LoginDialog(QWidget* parent)
     : QDialog(parent)
+    , m_connection(nullptr)
 {
-    m_connection = 0;
-    
     serverEdit = new QLineEdit("https://matrix.org");
     userEdit = new QLineEdit();
     passwordEdit = new QLineEdit();

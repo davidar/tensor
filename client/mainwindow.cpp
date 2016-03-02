@@ -44,7 +44,6 @@ MainWindow::MainWindow()
     setCentralWidget(chatRoomWidget);
     connect( roomListDock, &RoomListDock::roomSelected, chatRoomWidget, &ChatRoomWidget::setRoom );
     connect( roomListDock, &RoomListDock::roomSelected, userListDock, &UserListDock::setRoom );
-    show();
     QTimer::singleShot(0, this, SLOT(initialize()));
 }
 
