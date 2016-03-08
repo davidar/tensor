@@ -44,7 +44,7 @@ namespace QMatrixClient
             virtual bool isConnected();
 
             virtual void connectToServer( QString user, QString password );
-            virtual void reconnect();
+            virtual void invokeLogin();
             virtual SyncJob* sync(int timeout=-1);
             virtual void postMessage( Room* room, QString type, QString message );
             virtual PostReceiptJob* postReceipt( Room* room, Event* event );
@@ -59,7 +59,6 @@ namespace QMatrixClient
 
         signals:
             void connected();
-            void reconnected();
             void syncDone();
             void newRoom(Room* room);
             void joinedRoom(Room* room);

@@ -34,8 +34,8 @@
 #include "lib/jobs/geteventsjob.h"
 
 MainWindow::MainWindow()
+    : connection(nullptr)
 {
-    connection = 0;
     roomListDock = new RoomListDock(this);
     addDockWidget(Qt::LeftDockWidgetArea, roomListDock);
     userListDock = new UserListDock(this);
@@ -71,7 +71,7 @@ void MainWindow::initialize()
     setMenuBar(menuBar);
 
     LoginDialog dialog(this);
-    if( dialog.exec() )
+    if( dialog.exec() ) // We are connected now
     {
         connection = dialog.connection();
         chatRoomWidget->setConnection(connection);
@@ -79,7 +79,7 @@ void MainWindow::initialize()
         roomListDock->setConnection(connection);
         connect( connection, &QMatrixClient::Connection::connectionError, this, &MainWindow::connectionError );
         connect( connection, &QMatrixClient::Connection::syncDone, this, &MainWindow::gotEvents );
-        connect( connection, &QMatrixClient::Connection::reconnected, this, &MainWindow::getNewEvents );
+        connect( connection, &QMatrixClient::Connection::connected, this, &MainWindow::getNewEvents );
         connection->sync();
     }
 }
@@ -100,7 +100,7 @@ void MainWindow::connectionError(QString error)
 {
     qDebug() << error;
     qDebug() << "reconnecting...";
-    connection->reconnect();
+    connection->invokeLogin();
 }
 
 void MainWindow::closeEvent(QCloseEvent* event)
@@ -108,7 +108,7 @@ void MainWindow::closeEvent(QCloseEvent* event)
     if (connection)
     {
         disconnect( connection, &QMatrixClient::Connection::syncDone, this, &MainWindow::gotEvents );
-        disconnect( connection, &QMatrixClient::Connection::reconnected, this, &MainWindow::getNewEvents );
+        disconnect( connection, &QMatrixClient::Connection::connected, this, &MainWindow::getNewEvents );
     }
     event->accept();
 }

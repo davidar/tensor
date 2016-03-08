@@ -98,21 +98,8 @@ void ConnectionPrivate::connectDone(KJob* job)
         emit q->connected();
     }
     else {
-        emit q->loginError( job->errorString() );
-    }
-}
-
-void ConnectionPrivate::reconnectDone(KJob* job)
-{
-    PasswordLogin* realJob = static_cast<PasswordLogin*>(job);
-    if( !realJob->error() )
-    {
-        userId = realJob->id();
-        emit q->reconnected();
-    }
-    else {
-        emit q->loginError( job->errorString() );
         isConnected = false;
+        emit q->loginError( job->errorString() );
     }
 }
 
