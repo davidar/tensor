@@ -19,6 +19,8 @@
 #ifndef QMATRIXCLIENT_EVENT_H
 #define QMATRIXCLIENT_EVENT_H
 
+#include <algorithm>
+
 #include <QtCore/QString>
 #include <QtCore/QDateTime>
 #include <QtCore/QJsonObject>
@@ -44,6 +46,22 @@ namespace QMatrixClient
             // only for debug purposes!
             QString originalJson() const;
 
+            /**
+             * @brief Finds a place in the time-ordered list of events where a new
+             * event could be inserted
+             * @return an iterator to an event inside 'events' with the earliest
+             * timestamp after the one of 'ev'; events.end(), if all events are earlier
+             * than 'ev'
+             */
+            template <template <typename> class EvContT>
+            typename EvContT<Event *>::iterator
+            findEarliestAfterMe(EvContT<Event *> & events) const
+            {
+                auto comp = [](const Event * a, const Event * b) {
+                    return a->timestamp() < b->timestamp();
+                };
+                return std::lower_bound (events.begin(), events.end(), this, comp);
+            }
         protected:
             bool parseJson(const QJsonObject& obj);
         

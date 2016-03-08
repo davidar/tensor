@@ -42,21 +42,22 @@ MessageEventModel::~MessageEventModel()
 
 void MessageEventModel::changeRoom(QMatrixClient::Room* room)
 {
+    using namespace std;
+
     beginResetModel();
     if( m_currentRoom )
     {
         disconnect( m_currentRoom, &QMatrixClient::Room::newMessage, this, &MessageEventModel::newMessage );
+        // FIXME: Should the Events in m_currentMessages be deleted?
+        m_currentMessages.clear();
     }
     m_currentRoom = room;
     if( room )
     {
-        m_currentMessages = room->messages();
+        auto rm = room->messages();
+        copy(rm.begin(), rm.end(), back_inserter(m_currentMessages));
         connect( room, &QMatrixClient::Room::newMessage, this, &MessageEventModel::newMessage );
         qDebug() << "connected" << room;
-    }
-    else
-    {
-        m_currentMessages = QList<QMatrixClient::Event*>();
     }
     endResetModel();
 }
@@ -216,17 +217,9 @@ void MessageEventModel::newMessage(QMatrixClient::Event* messageEvent)
     {
         return;
     }
-    for( int i=0; i<m_currentMessages.count(); i++ )
-    {
-        if( messageEvent->timestamp() < m_currentMessages.at(i)->timestamp() )
-        {
-            beginInsertRows(QModelIndex(), i, i);
-            m_currentMessages.insert(i, messageEvent);
-            endInsertRows();
-            return;
-        }
-    }
-    beginInsertRows(QModelIndex(), m_currentMessages.count(), m_currentMessages.count());
-    m_currentMessages.append(messageEvent);
+    auto it = messageEvent->findEarliestAfterMe(m_currentMessages);
+    int pos = std::distance(m_currentMessages.begin(), it);
+    beginInsertRows(QModelIndex(), pos, pos);
+    m_currentMessages.insert(pos, messageEvent);
     endInsertRows();
 }

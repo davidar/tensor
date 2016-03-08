@@ -19,6 +19,8 @@
 #ifndef QMATRIXCLIENT_ROOM_H
 #define QMATRIXCLIENT_ROOM_H
 
+#include <QLinkedList>
+
 #include <QtCore/QList>
 #include <QtCore/QObject>
 #include <QtCore/QJsonObject>
@@ -37,11 +39,13 @@ namespace QMatrixClient
     {
             Q_OBJECT
         public:
+            typedef QLinkedList<Event*> events_list_t;
+
             Room(Connection* connection, QString id);
             virtual ~Room();
 
             QString id() const;
-            QList<Event*> messages() const;
+            events_list_t messages() const;
             QString name() const;
             QStringList aliases() const;
             QString canonicalAlias() const;

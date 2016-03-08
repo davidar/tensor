@@ -18,6 +18,8 @@
 
 #include "room.h"
 
+#include <QLinkedList>
+
 #include <QtCore/QJsonArray>
 #include <QtCore/QDebug>
 
@@ -48,7 +50,7 @@ class Room::Private: public QObject
         void gotMessages(KJob* job);
 
         Connection* connection;
-        QList<Event*> messageEvents;
+        QLinkedList<Event*> messageEvents;
         QString id;
         QStringList aliases;
         QString canonicalAlias;
@@ -86,7 +88,7 @@ QString Room::id() const
     return d->id;
 }
 
-QList< Event* > Room::messages() const
+Room::events_list_t Room::messages() const
 {
     return d->messageEvents;
 }
@@ -283,15 +285,7 @@ Connection* Room::connection()
 
 void Room::processMessageEvent(Event* event)
 {
-    for( int i=0; i<d->messageEvents.count(); i++ )
-    {
-        if( event->timestamp() < d->messageEvents.at(i)->timestamp() )
-        {
-            d->messageEvents.insert(i, event);
-            return;
-        }
-    }
-    d->messageEvents.append(event);
+    d->messageEvents.insert(event->findEarliestAfterMe(d->messageEvents), event);
 }
 
 void Room::processStateEvent(Event* event)

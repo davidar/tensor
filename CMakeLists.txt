@@ -118,6 +118,8 @@ if ( CMAKE_COMPILER_IS_GNUCC )
 endif ( CMAKE_COMPILER_IS_GNUCC )
 target_compile_features(quaternion PRIVATE cxx_range_for)
 target_compile_features(quaternion PRIVATE cxx_override)
+target_compile_features(quaternion PRIVATE cxx_variadic_templates)
+target_compile_features(quaternion PRIVATE cxx_lambdas)
 
 target_link_libraries(quaternion Qt5::Widgets Qt5::Quick Qt5::Qml Qt5::Gui Qt5::Network)
 if ( KF5CoreAddons_FOUND )
