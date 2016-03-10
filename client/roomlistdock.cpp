@@ -18,34 +18,28 @@
 
 #include "roomlistdock.h"
 
-#include <QtCore/QDebug>
-
 #include "models/roomlistmodel.h"
 #include "quaternionroom.h"
 
 RoomListDock::RoomListDock(QWidget* parent)
     : QDockWidget("Rooms", parent)
+    , m_connection(nullptr)
 {
-    connection = 0;
     //setWidget(new QWidget());
     model = new RoomListModel(this);
     view = new QListView();
     view->setModel(model);
-    connect( view, &QListView::activated, this, &RoomListDock::rowSelected );
+    connect( view, &QListView::activated, this,
+             [this](const QModelIndex & index) {
+                emit roomSelected( model->roomAt(index.row()) ); });
     setWidget(view);
 }
 
 RoomListDock::~RoomListDock()
-{
-}
+{ }
 
 void RoomListDock::setConnection( QMatrixClient::Connection* connection )
 {
-    this->connection = connection;
+    m_connection = connection;
     model->setConnection(connection);
-}
-
-void RoomListDock::rowSelected(const QModelIndex& index)
-{
-    emit roomSelected( model->roomAt(index.row()) );
 }

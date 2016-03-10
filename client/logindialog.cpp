@@ -63,11 +63,7 @@ void LoginDialog::login()
     QString password = passwordEdit->text();
     m_connection = new QuaternionConnection(url);
     connect( m_connection, &QMatrixClient::Connection::connected, this, &QDialog::accept );
-    connect( m_connection, &QMatrixClient::Connection::loginError, this, &LoginDialog::error );
+    connect( m_connection, &QMatrixClient::Connection::loginError,
+             this, [this](QString error) { sessionLabel->setText(error); } );
     m_connection->connectToServer(user, password);
-}
-
-void LoginDialog::error(QString error)
-{
-    sessionLabel->setText( error );
 }
