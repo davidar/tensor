@@ -28,10 +28,9 @@
 
 UserListModel::UserListModel(QObject* parent)
     : QAbstractListModel(parent)
-{
-    m_connection = 0;
-    m_currentRoom = 0;
-}
+    , m_connection(nullptr)
+    , m_currentRoom(nullptr)
+{ }
 
 UserListModel::~UserListModel()
 {
@@ -51,7 +50,8 @@ void UserListModel::setRoom(QMatrixClient::Room* room)
         disconnect( m_currentRoom, &QMatrixClient::Room::userRemoved, this, &UserListModel::userRemoved );
         for( auto user : m_users )
         {
-            disconnectSignals(user);
+            disconnect( user, &QMatrixClient::User::nameChanged, this, &UserListModel::userRenamed );
+            disconnect( user, &QMatrixClient::User::avatarChanged, this, &UserListModel::avatarChanged );
         }
         m_users.clear();
     }
@@ -60,10 +60,11 @@ void UserListModel::setRoom(QMatrixClient::Room* room)
     {
         connect( m_currentRoom, &QMatrixClient::Room::userAdded, this, &UserListModel::userAdded );
         connect( m_currentRoom, &QMatrixClient::Room::userRemoved, this, &UserListModel::userRemoved );
-        m_users = m_currentRoom->users();
+        m_users = m_currentRoom->users().values();
         for( auto user : m_users )
         {
-            connectSignals(user);
+            connect( user, &QMatrixClient::User::nameChanged, this, &UserListModel::userRenamed );
+            connect( user, &QMatrixClient::User::avatarChanged, this, &UserListModel::avatarChanged );
         }
         qDebug() << m_users.count();
     }
@@ -83,9 +84,7 @@ QVariant UserListModel::data(const QModelIndex& index, int role) const
     QMatrixClient::User* user = m_users.at(index.row());
     if( role == Qt::DisplayRole )
     {
-        if( user->name().isEmpty() )
-            return user->id();
-        return user->name();
+        return m_currentRoom->roomMembername(user);
     }
     if( role == Qt::DecorationRole )
     {
@@ -102,24 +101,12 @@ int UserListModel::rowCount(const QModelIndex& parent) const
     return m_users.count();
 }
 
-void UserListModel::connectSignals(QMatrixClient::User* user)
-{
-    connect( user, &QMatrixClient::User::avatarChanged,
-             this, &UserListModel::avatarChanged );
-}
-
-void UserListModel::disconnectSignals(QMatrixClient::User* user)
-{
-    disconnect( user, &QMatrixClient::User::avatarChanged,
-             this, &UserListModel::avatarChanged );
-}
-
 void UserListModel::userAdded(QMatrixClient::User* user)
 {
     beginInsertRows(QModelIndex(), m_users.count(), m_users.count());
     m_users.append(user);
     endInsertRows();
-    connectSignals(user);
+    connect( user, &QMatrixClient::User::avatarChanged, this, &UserListModel::avatarChanged );
 }
 
 void UserListModel::userRemoved(QMatrixClient::User* user)
@@ -128,7 +115,13 @@ void UserListModel::userRemoved(QMatrixClient::User* user)
     beginRemoveRows(QModelIndex(), pos, pos);
     m_users.removeAt(pos);
     endRemoveRows();
-    disconnectSignals(user);
+    disconnect( user, &QMatrixClient::User::avatarChanged, this, &UserListModel::avatarChanged );
+}
+
+void UserListModel::userRenamed(QMatrixClient::User *user, QString /* unused */)
+{
+    int pos = m_users.indexOf(user);
+    emit dataChanged(index(pos), index(pos), {Qt::DisplayRole} );
 }
 
 void UserListModel::avatarChanged(QMatrixClient::User* user)

@@ -22,6 +22,7 @@
 
 #include <QtCore/QJsonArray>
 #include <QtCore/QDebug>
+#include <QtCore/QStringBuilder> // for efficient string concats (operator%)
 
 #include "connection.h"
 #include "state.h"
@@ -39,7 +40,7 @@
 
 using namespace QMatrixClient;
 
-class Room::Private: public QObject
+class Room::Private
 {
     public:
         Private(Room* parent): q(parent) {}
@@ -47,23 +48,29 @@ class Room::Private: public QObject
         Room* q;
 
         //static LogMessage* parseMessage(const QJsonObject& message);
-        void gotMessages(KJob* job);
+        void renameUser(User* user, QString oldName);
+        void updateDisplayname();
 
         Connection* connection;
-        QLinkedList<Event*> messageEvents;
+        events_list_t messageEvents;
         QString id;
         QStringList aliases;
         QString canonicalAlias;
         QString name;
+        QString displayname;
         QString topic;
         JoinState joinState;
         int highlightCount;
         int notificationCount;
-        QList<User*> users;
+        members_list_t users;
         QList<User*> usersTyping;
+        QList<User*> usersLeft;
         QHash<User*, QString> lastReadEvent;
         QString prevBatch;
         bool gettingNewContent;
+
+    private:
+        QString roomNameFromMemberNames(const QList<User *> & userlist);
 };
 
 Room::Room(Connection* connection, QString id)
@@ -72,6 +79,7 @@ Room::Room(Connection* connection, QString id)
     d->id = id;
     d->connection = connection;
     d->joinState = JoinState::Join;
+    d->displayname = "Empty room <" % id % ">";
     d->gettingNewContent = false;
     qDebug() << "New Room:" << id;
 
@@ -110,29 +118,7 @@ QString Room::canonicalAlias() const
 
 QString Room::displayName() const
 {
-    if (name().isEmpty())
-    {
-        // Without a human name, try to find a substitute
-        if (!canonicalAlias().isEmpty())
-            return canonicalAlias();
-        if (!aliases().empty() && !aliases().at(0).isEmpty())
-            return aliases().at(0);
-        // Ok, last attempt - one on one chat
-        if (users().size() == 2) {
-            return users().at(0)->displayname() + " and " +
-                    users().at(1)->displayname();
-        }
-        // Fail miserably
-        return id();
-    }
-
-    // If we have a non-empty name, try to stack canonical alias to it.
-    // The format is unwittingly borrowed from the email address format.
-    QString dispName = name();
-    if (!canonicalAlias().isEmpty())
-        dispName += " <" + canonicalAlias() + ">";
-
-    return dispName;
+    return d->displayname;
 }
 
 QString Room::topic() const
@@ -195,9 +181,41 @@ QList< User* > Room::usersTyping() const
     return d->usersTyping;
 }
 
-QList< User* > Room::users() const
+QList<User *> Room::usersLeft() const
+{
+   return d->usersLeft;
+}
+
+Room::members_list_t Room::users() const
 {
     return d->users;
+}
+
+QString Room::roomMembername(User *u) const
+{
+    // See the CS spec, section 11.2.2.3
+
+    QString username = u->name();
+    if (username.isEmpty())
+        return u->id();
+
+    auto namesakes = d->users.values(username);
+    if (namesakes.size() == 1)
+        return username;
+
+#ifndef NDEBUG
+    // This is just a sanity check of our own data structures
+    auto u_it = std::find(namesakes.begin(), namesakes.end(), u);
+    if ( /* unlikely */ u_it == namesakes.end())
+    {
+        // Also treats the (also suspicious) case of namesakes.empty()
+        qDebug() << "Room::uniqueDisplayname(): no user" << u->id()
+                 << "in the room" << displayName();
+        return username;
+    }
+#endif
+
+    return username % " <" % u->id() % ">";
 }
 
 void Room::addMessage(Event* event)
@@ -255,11 +273,16 @@ void Room::getPreviousContent()
     {
         d->gettingNewContent = true;
         RoomMessagesJob* job = d->connection->getMessages(this, d->prevBatch);
-        connect( job, &RoomMessagesJob::result, d, &Room::Private::gotMessages );
+        connect( job, &RoomMessagesJob::result, this, &Room::gotMessages );
     }
 }
 
-void Room::Private::gotMessages(KJob* job)
+void Room::userRenamed(User *user, QString oldName)
+{
+    d->renameUser(user, oldName);
+}
+
+void Room::gotMessages(KJob* job)
 {
     RoomMessagesJob* realJob = static_cast<RoomMessagesJob*>(job);
     if( realJob->error() )
@@ -270,12 +293,12 @@ void Room::Private::gotMessages(KJob* job)
         {
         for( Event* event: realJob->events() )
         {
-            q->processMessageEvent(event);
-            emit q->newMessage(event);
+            processMessageEvent(event);
+            emit newMessage(event);
         }
-        prevBatch = realJob->end();
+        d->prevBatch = realJob->end();
     }
-    gettingNewContent = false;
+    d->gettingNewContent = false;
 }
 
 Connection* Room::connection()
@@ -290,32 +313,32 @@ void Room::processMessageEvent(Event* event)
 
 void Room::processStateEvent(Event* event)
 {
+    if (!event)
+    {
+        qDebug() << "!!! nullptr passed to Room::Private::addState";
+        return;
+    }
+
     if( event->type() == EventType::RoomName )
     {
-        if (RoomNameEvent* nameEvent = static_cast<RoomNameEvent*>(event))
-        {
-            d->name = nameEvent->name();
-            qDebug() << "room name:" << d->name;
-            emit namesChanged(this);
-        } else
-        {
-            qDebug() <<
-                "!!! event type is RoomName but the event is not RoomNameEvent";
-        }
+        RoomNameEvent* nameEvent = static_cast<RoomNameEvent*>(event);
+        d->name = nameEvent->name();
+        qDebug() << "room name:" << d->name;
+        d->updateDisplayname();
     }
     if( event->type() == EventType::RoomAliases )
     {
         RoomAliasesEvent* aliasesEvent = static_cast<RoomAliasesEvent*>(event);
         d->aliases = aliasesEvent->aliases();
         qDebug() << "room aliases:" << d->aliases;
-        emit namesChanged(this);
+        d->updateDisplayname();
     }
     if( event->type() == EventType::RoomCanonicalAlias )
     {
         RoomCanonicalAliasEvent* aliasEvent = static_cast<RoomCanonicalAliasEvent*>(event);
         d->canonicalAlias = aliasEvent->alias();
         qDebug() << "room canonical alias:" << d->canonicalAlias;
-        emit namesChanged(this);
+        d->updateDisplayname();
     }
     if( event->type() == EventType::RoomTopic )
     {
@@ -327,20 +350,27 @@ void Room::processStateEvent(Event* event)
     {
         RoomMemberEvent* memberEvent = static_cast<RoomMemberEvent*>(event);
         User* u = d->connection->user(memberEvent->userId());
-        u->processEvent(event);
-        if( memberEvent->membership() == MembershipType::Join and !d->users.contains(u) )
+
+        u->processEvent(memberEvent);
+        if( memberEvent->membership() == MembershipType::Join
+            && !d->users.values(u->name()).contains(u) )
         {
-            d->users.append(u);
+            d->users.insert(u->name(), u);
+            connect(u, &User::nameChanged, this, &Room::userRenamed);
             emit userAdded(u);
+            d->updateDisplayname();
         }
-        else if( memberEvent->membership() == MembershipType::Leave
-                 and d->users.contains(u) )
+        else if( memberEvent->membership() == MembershipType::Leave )
         {
-            d->users.removeAll(u);
+            if( d->users.values(u->name()).contains(u) )
+                d->users.remove(u->name(), u);
+            if( !d->usersLeft.contains(u) ) // which is strange
+                d->usersLeft.append(u);
+            disconnect(u, &User::nameChanged, this, &Room::userRenamed);
             emit userRemoved(u);
+            d->updateDisplayname();
         }
     }
-
 }
 
 void Room::processEphemeralEvent(Event* event)
@@ -349,9 +379,9 @@ void Room::processEphemeralEvent(Event* event)
     {
         TypingEvent* typingEvent = static_cast<TypingEvent*>(event);
         d->usersTyping.clear();
-        for( const QString& user: typingEvent->users() )
+        for( const QString& userid: typingEvent->users() )
         {
-            d->usersTyping.append(d->connection->user(user));
+            d->usersTyping.append(d->connection->user(userid));
         }
         emit typingChanged();
     }
@@ -359,14 +389,104 @@ void Room::processEphemeralEvent(Event* event)
     {
         ReceiptEvent* receiptEvent = static_cast<ReceiptEvent*>(event);
         for( QString eventId: receiptEvent->events() )
-    {
+        {
             QList<Receipt> receipts = receiptEvent->receiptsForEvent(eventId);
             for( Receipt r: receipts )
-        {
+            {
                 d->lastReadEvent.insert(d->connection->user(r.userId), eventId);
+            }
         }
     }
+}
+
+void Room::Private::renameUser(User *user, QString oldName)
+{
+    if (users.values(oldName).contains(user))
+    {
+        // Re-add the user to the hashmap under a new name.
+        users.remove(oldName, user);
+        users.insert(user->name(), user);
+        updateDisplayname();
     }
+}
+
+QString Room::Private::roomNameFromMemberNames(const QList<User *> &userlist)
+{
+    QList<User *> first_two{nullptr,nullptr};
+    std::partial_sort_copy(
+        userlist.begin(), userlist.end(),
+        first_two.begin(), first_two.end(),
+        [this](const User* u1, const User* u2) {
+            // Filter out the "me" user so that it never hits the room name
+            return u1 != connection->user() && u1->id() < u2->id();
+        }
+    );
+
+    if (userlist.size() == 2)
+        return q->roomMembername(first_two.at(0));
+
+    if (userlist.size() == 3)
+        return q->roomMembername(first_two.at(0)) %
+                " and " % q->roomMembername(first_two.at(1));
+
+    if (userlist.size() > 3)
+        return QString("%1 and %2 others")
+                .arg(q->roomMembername(first_two.at(0)))
+                .arg(userlist.size() - 3); // To make it locale-aware, use %L2
+
+    return QString();
+}
+
+void Room::Private::updateDisplayname()
+{
+    const QString old_name = displayname;
+
+    // CS spec, section 11.2.2.5 Calculating the display name for a room
+    // Numbers and i's below refer to respective parts in the spec.
+    do {
+        // while (false) - we'll break out of the sequence once the name is
+        // ready inside if statements
+
+        // 1. Name (from m.room.name)
+        if (!name.isEmpty()) {
+            // The below is spec extension.
+            // If we have a non-empty m.room.name, try to stack a canonical alias to it.
+            // The format is unwittingly borrowed from the email address format.
+            displayname = name;
+            if (!canonicalAlias.isEmpty())
+                displayname += " <" % canonicalAlias % ">";
+            break;
+        }
+
+        // 2. Canonical alias
+        if (!canonicalAlias.isEmpty()) {
+            displayname = canonicalAlias;
+            break;
+        }
+
+        // 3. Room members
+        // The spec requires to sort users lexicographically by state_key
+        // (i.e. user id) and use disambiguated display names of two topmost
+        // users for the name of the room. Ok, let's do it.
+        displayname = roomNameFromMemberNames(users.values());
+        if (!displayname.isEmpty())
+            break;
+
+        // 4. Users that previously left the room
+        displayname = roomNameFromMemberNames(usersLeft);
+        if (!displayname.isEmpty())
+            break;
+
+        // 5. Fail miserably
+        displayname = "Empty room (" % id % ")";
+
+        // Using m.room.aliases is explicitly discouraged by the spec
+        //if (!aliases().empty() && !aliases().at(0).isEmpty())
+        //    displayname = aliases().at(0);
+    } while (false);
+
+    if (old_name != displayname)
+        emit q->namesChanged(q);
 }
 
 // void Room::setAlias(QString alias)
