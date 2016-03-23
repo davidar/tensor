@@ -28,6 +28,9 @@
 UserListDock::UserListDock(QWidget* parent)
     : QDockWidget("Users", parent)
 {
+    setFeatures(DockWidgetMovable | DockWidgetFloatable);
+    setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+
     m_view = new QTableView();
     m_view->setShowGrid(false);
     m_view->horizontalHeader()->setStretchLastSection(true);
