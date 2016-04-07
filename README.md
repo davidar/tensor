@@ -1,5 +1,5 @@
-# Quaternion
-Quaternion is an IM client for the [Matrix](https://matrix.org) protocol in development.
+# Tensor
+Tensor is an IM client for the [Matrix](https://matrix.org) protocol in development.
 
 ## Pre-requisites
 - a Linux or Windows system (MacOS should work too)
@@ -11,7 +11,7 @@ Quaternion is an IM client for the [Matrix](https://matrix.org) protocol in deve
 
 ## Linux
 ### Installing pre-requisites
-Just install things from "Pre-requisites" using your preferred package manager. If your Qt package base is fine-grained you might want to take a look at CMakeLists.txt to figure out which specific libraries Quaternion uses.
+Just install things from "Pre-requisites" using your preferred package manager. If your Qt package base is fine-grained you might want to take a look at CMakeLists.txt to figure out which specific libraries Tensor uses.
 
 ### Building
 From the root directory of the project sources:
@@ -39,7 +39,7 @@ mkdir build
 cd build
 cmake ../ -DCMAKE_PREFIX_PATH=/usr/local/Cellar/qt5/5.5.1/ # or whatever version of qt5 brew installed
 make
-quaternion &
+tensor &
 ```
 
 ### Troubleshooting
@@ -55,11 +55,11 @@ CMake Warning at CMakeLists.txt:11 (find_package):
 
 If `make` fails with...
 ```
-Scanning dependencies of target quaternion
-make[2]: *** No rule to make target `CMakeFiles/quaternion.dir/build'.  Stop.
-make[1]: *** [CMakeFiles/quaternion.dir/all] Error 2
+Scanning dependencies of target tensor
+make[2]: *** No rule to make target `CMakeFiles/tensor.dir/build'.  Stop.
+make[1]: *** [CMakeFiles/tensor.dir/all] Error 2
 ```
-...then cmake failed to create a build target for quaternion as it couldn't find
+...then cmake failed to create a build target for tensor as it couldn't find
 an optional dependency - probably KCoreAddons.  You probably forgot to do the
 `git submodule init && git submodule update` dance.
 
@@ -72,8 +72,8 @@ Here you have options.
 Notes:
 - This is quicker but takes a bit of your time to gather and install everything.
 - Unless you already have Visual Studio installed, it's quicker and easier to rely on MinGW supplied by the Qt's online installer. It's only 32-bit yet, though.
-- At the time of this writing (Feb '16), there're no official Qt packages for MinGW 64-bit; so if you want a 64-bit Quaternion built by MinGW you have to pass on to the next section.
-- You're not getting a "system" KCoreAddons this way - the in-tree version will be used instead to build Quaternion.
+- At the time of this writing (Feb '16), there're no official Qt packages for MinGW 64-bit; so if you want a 64-bit Tensor built by MinGW you have to pass on to the next section.
+- You're not getting a "system" KCoreAddons this way - the in-tree version will be used instead to build Tensor.
 Actions: download and install things from "Pre-requisites" (except KCoreAddons) in no particular order.
 
 #### Build-the-world
@@ -90,8 +90,8 @@ Actions:
   - Download and install Windows SDK: https://dev.windows.com/en-us/downloads/windows-10-sdk and set DXSDK_DIR environment variable to the root of the installation. This is needed for Qt to compile the DirectX-dependent parts.
   - Alternatively (in theory, nobody tried it yet), you can setup/hack Qt portages so that Qt compilation doesn't rely on DirectX (see http://doc.qt.io/qt-5/windows-requirements.html#graphics-drivers for details about linking Qt to OpenGL).
 3. Enter ```emerge qt qtquickcontrols kcoreaddons``` inside the shell made by the kdeenv script (see the KDE TechBase article), double check that the checkout-configure-build-install process has started and leave it running. Leaving it for a night on even an older machine should suffice.
-4. Once the build is over, make sure you have the toolchain reachable from the environment you're going to compile Quaternion in. If you plan to use the just-compiled MinGW and CMake to compile Quaternion you might want to add <KDEROOT>/dev-utils/bin and <KDEROOT>/mingw64/bin into your PATH for convenience. If you have other MinGW or CMake installations around you have to carefully select the order of PATH entries and bear in mind that emerge usually takes the latest versions by default (which are not necessarily the same that you installed).
-  - Alternatively: just build Quaternion inside the same kdeenv wrapper shell (not tried but should work).
+4. Once the build is over, make sure you have the toolchain reachable from the environment you're going to compile Tensor in. If you plan to use the just-compiled MinGW and CMake to compile Tensor you might want to add <KDEROOT>/dev-utils/bin and <KDEROOT>/mingw64/bin into your PATH for convenience. If you have other MinGW or CMake installations around you have to carefully select the order of PATH entries and bear in mind that emerge usually takes the latest versions by default (which are not necessarily the same that you installed).
+  - Alternatively: just build Tensor inside the same kdeenv wrapper shell (not tried but should work).
 
 ### Building
 All operations below assume that mingw32-make (if you use the MinGW toolchain) and cmake are in your PATH. If you use an IDE, import the sources as a CMake project and the IDE should do the rest for you. Qt Creator (the stock Qt IDE) and CLion were checked to work. The source tree also contains a (no more maintained) .project file for CodeLite.

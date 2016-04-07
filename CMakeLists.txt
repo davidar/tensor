@@ -1,6 +1,6 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8.11) # Maybe works with an even older CMake
 
-project(quaternion)
+project(tensor)
 enable_language(CXX)
 
 include(CheckCXXCompilerFlag)
@@ -19,7 +19,7 @@ find_package(Qt5Gui 5.3.0)
 
 message( STATUS )
 message( STATUS "================================================================================" )
-message( STATUS "                          Quaternion Build Information                          " )
+message( STATUS "                            Tensor Build Information                            " )
 message( STATUS "================================================================================" )
 message( STATUS "Building with: ${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION}" )
 message( STATUS "Install Prefix: ${CMAKE_INSTALL_PREFIX}" )
@@ -30,7 +30,7 @@ message( STATUS )
 add_subdirectory(lib)
 
 # Set up source files
-set(quaternion_SRCS
+set(tensor_SRCS
     client/quaternionroom.cpp
     client/models/messageeventmodel.cpp
     client/models/userlistmodel.cpp
@@ -38,16 +38,16 @@ set(quaternion_SRCS
     client/main.cpp
     )
 
-set(quaternion_QRC
+set(tensor_QRC
     client/resources.qrc
     )
 
-QT5_ADD_RESOURCES(quaternion_QRC_SRC ${quaternion_QRC})
+QT5_ADD_RESOURCES(tensor_QRC_SRC ${tensor_QRC})
 
 # Tell CMake to create the executable
 # (and that on Windows it should be a GUI executable)
 # TODO: MacOS builders, should MACOSX_BUNDLE be specified here as well?
-add_executable(quaternion WIN32 ${quaternion_SRCS} ${quaternion_QRC_SRC})
+add_executable(tensor WIN32 ${tensor_SRCS} ${tensor_QRC_SRC})
 
 # Setup command line parameters for the compiler and linker
 CHECK_CXX_COMPILER_FLAG("-Wall" WALL_FLAG_SUPPORTED)
@@ -61,19 +61,19 @@ if ( CMAKE_VERSION VERSION_LESS "3.1" )
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
     endif ( STD_FLAG_SUPPORTED )
 else ( CMAKE_VERSION VERSION_LESS "3.1" )
-    target_compile_features(quaternion PRIVATE cxx_range_for)
-    target_compile_features(quaternion PRIVATE cxx_override)
+    target_compile_features(tensor PRIVATE cxx_range_for)
+    target_compile_features(tensor PRIVATE cxx_override)
 endif ( CMAKE_VERSION VERSION_LESS "3.1" )
 
-target_link_libraries(quaternion qmatrixclient Qt5::Widgets Qt5::Quick Qt5::Qml Qt5::Gui Qt5::Network)
+target_link_libraries(tensor qmatrixclient Qt5::Widgets Qt5::Quick Qt5::Qml Qt5::Gui Qt5::Network)
 if ( KF5CoreAddons_FOUND )
     # The proper way of doing things would be to make a separate config.h.in
     # file and use configure_file() command here to generate config.h with
     # needed C++ preprocessor macros. If we have more than one or two
     # dependencies like that, we should turn to that more scalable way.
     # As for now, passing a macro through -D is easier to observe and maintain.
-    target_compile_definitions ( quaternion PRIVATE USING_SYSTEM_KCOREADDONS )
-    target_link_libraries(quaternion KF5::CoreAddons)
+    target_compile_definitions ( tensor PRIVATE USING_SYSTEM_KCOREADDONS )
+    target_link_libraries(tensor KF5::CoreAddons)
 else ( KF5CoreAddons_FOUND )
     include_directories( lib lib/kcoreaddons/src/lib/jobs )
 endif ( KF5CoreAddons_FOUND )
