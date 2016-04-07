@@ -14,6 +14,7 @@ before_install:
  - if [ "$INSTALL_KCOREADDONS" = false ]; then cd lib && git submodule update --init && cd ..; fi
 install:
  - source /opt/qt54/bin/qt54-env.sh
+ - qmllint client/qml/*.qml
  - mkdir build && cd build
  - cmake ../
  - make
