@@ -1,38 +1,53 @@
-/******************************************************************************
- * Copyright (C) 2015 Felix Rohrbach <kde@fxrh.de>
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- */
+#include <QGuiApplication>
+#include <QQmlEngine>
+#include <QQmlFileSelector>
+#include <QQuickView>
 
-#include <QtWidgets/QApplication>
-#include <QtWidgets/QWidget>
-#include <QtCore/QTimer>
+#include "connection.h"
+#include "room.h"
+#include "jobs/syncjob.h"
+#include "models/messageeventmodel.h"
+#include "models/roomlistmodel.h"
+using namespace QMatrixClient;
 
-#include "mainwindow.h"
+#include "quaternionroom.h"
 
-int main( int argc, char* argv[] )
-{
-    QApplication app(argc, argv);
-    
-    MainWindow window;
-    window.show();
-    
-    //LoginDialog dialog(&widget);
-    //QTimer::singleShot(0, &dialog, &QDialog::exec);
-    //dialog.exec();
-    
+// https://forum.qt.io/topic/57809
+Q_DECLARE_METATYPE(SyncJob*)
+Q_DECLARE_METATYPE(Room*)
+Q_DECLARE_METATYPE(QuaternionRoom*)
+
+int main(int argc, char* argv[]) {
+    QGuiApplication app(argc,argv);
+    app.setOrganizationName("David A Roberts");
+    app.setOrganizationDomain("davidar.io");
+    app.setApplicationName("Tensor");
+    QQuickView view;
+    if(qgetenv("QT_QUICK_CORE_PROFILE").toInt()) {
+        QSurfaceFormat f = view.format();
+        f.setProfile(QSurfaceFormat::CoreProfile);
+        f.setVersion(4, 4);
+        view.setFormat(f);
+    }
+    view.connect(view.engine(), SIGNAL(quit()), &app, SLOT(quit()));
+    new QQmlFileSelector(view.engine(), &view);
+
+    qmlRegisterType<SyncJob>();
+    qmlRegisterType<Room>();
+    qRegisterMetaType<Room*>("Room*");
+    qmlRegisterType<QuaternionRoom>();
+    qmlRegisterType<Connection>("Matrix", 1, 0, "Connection");
+    qmlRegisterType<MessageEventModel>("Matrix", 1, 0, "MessageEventModel");
+    qmlRegisterType<RoomListModel>("Matrix", 1, 0, "RoomListModel");
+
+    view.setSource(QUrl("qrc:/qml/Tensor.qml"));
+    view.setResizeMode(QQuickView::SizeRootObjectToView);
+    if(QGuiApplication::platformName() == QLatin1String("qnx") ||
+       QGuiApplication::platformName() == QLatin1String("eglfs")) {
+        view.showFullScreen();
+    } else {
+        view.show();
+    }
     return app.exec();
 }
 

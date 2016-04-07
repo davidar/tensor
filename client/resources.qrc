@@ -1,7 +1,12 @@
-<!DOCTYPE RCC><RCC version="1.0">
-<qresource>
-    <file>qml/chat.qml</file>
-    <file>qml/ToolTip.qml</file>
-    <file>qml/ToolTipArea.qml</file>
-</qresource>
+<RCC>
+    <qresource prefix="/">
+        <file>qml/ToolTip.qml</file>
+        <file>qml/ToolTipArea.qml</file>
+        <file>logo.png</file>
+        <file>qml/Login.qml</file>
+        <file>qml/RoomList.qml</file>
+        <file>qml/Tensor.qml</file>
+        <file>qml/ChatRoom.qml</file>
+        <file>qml/RoomView.qml</file>
+    </qresource>
 </RCC>

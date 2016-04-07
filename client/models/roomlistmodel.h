@@ -36,8 +36,8 @@ class RoomListModel: public QAbstractListModel
         RoomListModel(QObject* parent=0);
         virtual ~RoomListModel();
 
-        void setConnection(QMatrixClient::Connection* connection);
-        QuaternionRoom* roomAt(int row);
+        Q_INVOKABLE void setConnection(QMatrixClient::Connection* connection);
+        Q_INVOKABLE QuaternionRoom* roomAt(int row);
 
         QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
         int rowCount(const QModelIndex& parent=QModelIndex()) const override;

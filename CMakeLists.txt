@@ -34,7 +34,6 @@ set(quaternion_SRCS
     client/quaternionconnection.cpp
     client/quaternionroom.cpp
     client/logindialog.cpp
-    client/mainwindow.cpp
     client/roomlistdock.cpp
     client/userlistdock.cpp
     client/chatroomwidget.cpp

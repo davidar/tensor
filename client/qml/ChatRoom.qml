@@ -1,14 +1,40 @@
 import QtQuick 2.0
 import QtQuick.Controls 1.0
+import Matrix 1.0
 
 Rectangle {
     id: root
     anchors.fill: parent
 
-    signal getPreviousContent()
+    property Connection currentConnection: null
+    property var currentRoom: null
+
+    function getPreviousContent() {
+        currentRoom.getPreviousContent()
+    }
 
     function scrollToBottom() {
         chatView.positionViewAtEnd();
+    }
+
+    function setRoom(room) {
+        currentRoom = room
+        messageModel.changeRoom(room)
+        scrollToBottom()
+    }
+
+    function setConnection(conn) {
+        currentConnection = conn
+        messageModel.setConnection(conn)
+    }
+
+    function sendLine(text) {
+        if(!currentRoom || !currentConnection) return
+        currentConnection.postMessage(currentRoom, "m.text", text)
+    }
+
+    MessageEventModel {
+        id: messageModel
     }
 
     ScrollView {
