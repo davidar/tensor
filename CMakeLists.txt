@@ -31,12 +31,7 @@ add_subdirectory(lib)
 
 # Set up source files
 set(quaternion_SRCS
-    client/quaternionconnection.cpp
     client/quaternionroom.cpp
-    client/logindialog.cpp
-    client/roomlistdock.cpp
-    client/userlistdock.cpp
-    client/chatroomwidget.cpp
     client/models/messageeventmodel.cpp
     client/models/userlistmodel.cpp
     client/models/roomlistmodel.cpp
