@@ -1,6 +1,8 @@
 # Tensor
 Tensor is an IM client for the [Matrix](https://matrix.org) protocol in development.
 
+![](client/logo.png)
+
 ## Pre-requisites
 - a Linux or Windows system (MacOS should work too)
 - a Git client (to check out this repo)
