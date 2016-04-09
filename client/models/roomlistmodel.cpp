@@ -23,7 +23,6 @@
 
 #include "lib/connection.h"
 #include "lib/room.h"
-#include "../quaternionroom.h"
 
 RoomListModel::RoomListModel(QObject* parent)
     : QAbstractListModel(parent)
@@ -39,26 +38,16 @@ void RoomListModel::setConnection(QMatrixClient::Connection* connection)
 {
     beginResetModel();
     m_connection = connection;
-    for( QuaternionRoom* room: m_rooms )
-    {
-        disconnect( room, &QuaternionRoom::namesChanged, this, &RoomListModel::namesChanged );
-        disconnect( room, &QuaternionRoom::unreadMessagesChanged, this, &RoomListModel::unreadMessagesChanged );
-        disconnect( room, &QuaternionRoom::notificationCountChanged, this, &RoomListModel::unreadMessagesChanged );
-    }
     m_rooms.clear();
     connect( connection, &QMatrixClient::Connection::newRoom, this, &RoomListModel::addRoom );
-    for( QMatrixClient::Room* r: connection->roomMap().values() )
+    for( QMatrixClient::Room* room: connection->roomMap().values() )
     {
-        QuaternionRoom* room = static_cast<QuaternionRoom*>(r);
-        connect( room, &QuaternionRoom::namesChanged, this, &RoomListModel::namesChanged );
-        connect( room, &QuaternionRoom::unreadMessagesChanged, this, &RoomListModel::unreadMessagesChanged );
-        connect( room, &QuaternionRoom::notificationCountChanged, this, &RoomListModel::unreadMessagesChanged );
-        m_rooms.append(static_cast<QuaternionRoom*>(r));
+        m_rooms.append(room);
     }
     endResetModel();
 }
 
-QuaternionRoom* RoomListModel::roomAt(int row)
+QMatrixClient::Room* RoomListModel::roomAt(int row)
 {
     return m_rooms.at(row);
 }
@@ -66,11 +55,8 @@ QuaternionRoom* RoomListModel::roomAt(int row)
 void RoomListModel::addRoom(QMatrixClient::Room* room)
 {
     beginInsertRows(QModelIndex(), m_rooms.count(), m_rooms.count());
-    QuaternionRoom* qRoom = static_cast<QuaternionRoom*>(room);
-    m_rooms.append(qRoom);
-    connect( qRoom, &QuaternionRoom::namesChanged, this, &RoomListModel::namesChanged );
-    connect( qRoom, &QuaternionRoom::unreadMessagesChanged, this, &RoomListModel::unreadMessagesChanged );
-    connect( qRoom, &QuaternionRoom::notificationCountChanged, this, &RoomListModel::unreadMessagesChanged );
+    qDebug() << "adding room " << room << " after " << m_rooms.count();
+    m_rooms.append(room);
     endInsertRows();
 }
 
@@ -91,7 +77,7 @@ QVariant RoomListModel::data(const QModelIndex& index, int role) const
         qDebug() << "UserListModel: something wrong here...";
         return QVariant();
     }
-    QuaternionRoom* room = m_rooms.at(index.row());
+    QMatrixClient::Room* room = m_rooms.at(index.row());
     if( role == Qt::DisplayRole )
     {
         return room->displayName();
@@ -100,8 +86,6 @@ QVariant RoomListModel::data(const QModelIndex& index, int role) const
     {
         if( room->highlightCount() > 0 )
             return QBrush(QColor("orange"));
-        if( room->hasUnreadMessages() )
-            return QBrush(QColor("blue"));
         return QVariant();
     }
     return QVariant();
@@ -109,12 +93,12 @@ QVariant RoomListModel::data(const QModelIndex& index, int role) const
 
 void RoomListModel::namesChanged(QMatrixClient::Room* room)
 {
-    int row = m_rooms.indexOf(static_cast<QuaternionRoom*>(room));
+    int row = m_rooms.indexOf(room);
     emit dataChanged(index(row), index(row));
 }
 
 void RoomListModel::unreadMessagesChanged(QMatrixClient::Room* room)
 {
-    int row = m_rooms.indexOf(static_cast<QuaternionRoom*>(room));
+    int row = m_rooms.indexOf(room);
     emit dataChanged(index(row), index(row));
 }

@@ -10,12 +10,9 @@
 #include "models/roomlistmodel.h"
 using namespace QMatrixClient;
 
-#include "quaternionroom.h"
-
 // https://forum.qt.io/topic/57809
 Q_DECLARE_METATYPE(SyncJob*)
 Q_DECLARE_METATYPE(Room*)
-Q_DECLARE_METATYPE(QuaternionRoom*)
 
 int main(int argc, char* argv[]) {
     QGuiApplication app(argc,argv);
@@ -35,7 +32,6 @@ int main(int argc, char* argv[]) {
     qmlRegisterType<SyncJob>();
     qmlRegisterType<Room>();
     qRegisterMetaType<Room*>("Room*");
-    qmlRegisterType<QuaternionRoom>();
     qmlRegisterType<Connection>("Matrix", 1, 0, "Connection");
     qmlRegisterType<MessageEventModel>("Matrix", 1, 0, "MessageEventModel");
     qmlRegisterType<RoomListModel>("Matrix", 1, 0, "RoomListModel");
