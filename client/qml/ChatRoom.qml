@@ -4,7 +4,6 @@ import Matrix 1.0
 
 Rectangle {
     id: root
-    anchors.fill: parent
 
     property Connection currentConnection: null
     property var currentRoom: null
@@ -18,6 +17,7 @@ Rectangle {
     }
 
     function setRoom(room) {
+        console.log("setRoom", room)
         currentRoom = room
         messageModel.changeRoom(room)
         scrollToBottom()

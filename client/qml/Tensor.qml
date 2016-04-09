@@ -10,13 +10,15 @@ Rectangle {
     focus: true
     color: "#eee"
 
+    property var syncJob: null
+
     Connection {
         id: connection
     }
 
     function resync() {
         login.visible = false; mainView.visible = true
-        connection.sync(30000)
+        syncJob = connection.sync(30000)
     }
 
     function login(user, pass) {
@@ -24,7 +26,7 @@ Rectangle {
             connection.connectionError.connect(connection.reconnect)
             connection.syncDone.connect(resync)
             connection.reconnected.connect(resync)
-            connection.sync()
+            syncJob = connection.sync()
         })
         connection.connectToServer(user, pass)
     }
