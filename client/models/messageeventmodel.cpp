@@ -219,7 +219,7 @@ void MessageEventModel::newMessage(QMatrixClient::Event* messageEvent)
     {
         return;
     }
-    for( int i = m_currentMessages.count() - 1; i >= 0; i++ )
+    for( int i = m_currentMessages.count() - 1; i >= 0; i-- )
     {
         if( messageEvent->timestamp() < m_currentMessages.at(i)->timestamp() )
         {
