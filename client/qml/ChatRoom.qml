@@ -8,19 +8,9 @@ Rectangle {
     property Connection currentConnection: null
     property var currentRoom: null
 
-    function getPreviousContent() {
-        currentRoom.getPreviousContent()
-    }
-
-    function scrollToBottom() {
-        chatView.positionViewAtEnd();
-    }
-
     function setRoom(room) {
-        console.log("setRoom", room)
         currentRoom = room
         messageModel.changeRoom(room)
-        scrollToBottom()
     }
 
     function setConnection(conn) {
@@ -33,89 +23,59 @@ Rectangle {
         currentConnection.postMessage(currentRoom, "m.text", text)
     }
 
-    MessageEventModel {
-        id: messageModel
-    }
+    ListView {
+        id: chatView
+        anchors.fill: parent
+        flickableDirection: Flickable.VerticalFlick
+        rotation: 180 // https://wiki.qt.io/How_to_make_QML_ListView_align_bottom-to-top
+        model: MessageEventModel { id: messageModel }
 
-    ScrollView {
-    anchors.fill: parent
-
-        ListView {
-            id: chatView
-            anchors.fill: parent
-            //width: 200; height: 250
-
-            model: messageModel
-            delegate: messageDelegate
-            flickableDirection: Flickable.VerticalFlick
-            pixelAligned: true
-            property bool wasAtEndY: true
-
-            function aboutToBeInserted() {
-                wasAtEndY = atYEnd;
-                console.log("aboutToBeInserted! atYEnd=" + atYEnd);
-            }
-
-            function rowsInserted() {
-                if( wasAtEndY )
-                {
-                    root.scrollToBottom();
-                } else  {
-                    console.log("was not at end, not scrolling");
-                }
-            }
-
-            Component.onCompleted: {
-                console.log("onCompleted");
-                model.rowsAboutToBeInserted.connect(aboutToBeInserted);
-                model.rowsInserted.connect(rowsInserted);
-                //positionViewAtEnd();
-            }
-
-            section {
-                property: "date"
-                delegate: Rectangle {
-                    width:parent.width
-                    height: childrenRect.height
-                    Label { text: section.toLocaleString("dd.MM.yyyy") }
-                }
-            }
-
-            onContentYChanged: {
-                if( (this.contentY - this.originY) < 5 )
-                {
-                    console.log("get older content!");
-                    root.getPreviousContent()
-                }
-
-            }
-        }
-    }
-
-    Component {
-        id: messageDelegate
-
-        Row {
+        delegate: Row {
             id: message
             width: parent.width
+            spacing: 8
+            rotation: 180
 
             Label {
                 id: timelabel
-                text: time.toLocaleString(Qt.locale("de_DE"), "'<'hh:mm:ss'>'")
+                text: time.toLocaleTimeString("hh:mm:ss")
                 color: "grey"
             }
             Label {
-                width: 120; elide: Text.ElideRight;
+                width: 64
+                elide: Text.ElideRight
                 text: eventType == "message" ? author : "***"
-                horizontalAlignment: if( eventType != "message" ) { Text.AlignRight }
-                color: if( eventType != "message" ) { "lightgrey" } else { "black" }
+                color: eventType == "message" ? "grey" : "lightgrey"
+                horizontalAlignment: Text.AlignRight
             }
-            TextEdit { selectByMouse: true; readOnly: true; font: timelabel.font;
-                    text: content; wrapMode: Text.Wrap; width: parent.width - (x - parent.x) - spacing
-                    color: if( eventType != "message" ) { "lightgrey" } else { "black" }
-                    ToolTipArea { tip { text: toolTip; color: "#999999"; zParent: message } }
+            TextEdit {
+                selectByMouse: true
+                readOnly: true
+                font: timelabel.font
+                text: content
+                wrapMode: Text.Wrap
+                width: parent.width - (x - parent.x) - spacing
+                color: eventType == "message" ? "black" : "lightgrey"
             }
-            spacing: 3
+        }
+
+        section {
+            property: "date"
+            labelPositioning: ViewSection.CurrentLabelAtStart
+            delegate: Rectangle {
+                width: parent.width
+                height: childrenRect.height
+                rotation: 180
+                Label {
+                    width: parent.width
+                    text: section.toLocaleString("yyyy-MM-dd")
+                    horizontalAlignment: Text.AlignRight
+                }
+            }
+        }
+
+        onAtYEndChanged: {
+            if(currentRoom && atYEnd) currentRoom.getPreviousContent()
         }
     }
 }

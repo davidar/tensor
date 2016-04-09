@@ -55,7 +55,6 @@ QMatrixClient::Room* RoomListModel::roomAt(int row)
 void RoomListModel::addRoom(QMatrixClient::Room* room)
 {
     beginInsertRows(QModelIndex(), m_rooms.count(), m_rooms.count());
-    qDebug() << "adding room " << room << " after " << m_rooms.count();
     m_rooms.append(room);
     endInsertRows();
 }

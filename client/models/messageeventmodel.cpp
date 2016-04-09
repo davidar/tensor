@@ -18,6 +18,8 @@
 
 #include "messageeventmodel.h"
 
+#include <algorithm>
+
 #include <QtCore/QDebug>
 
 #include "lib/connection.h"
@@ -51,6 +53,7 @@ void MessageEventModel::changeRoom(QMatrixClient::Room* room)
     if( room )
     {
         m_currentMessages = room->messages();
+        std::reverse(std::begin(m_currentMessages), std::end(m_currentMessages));
         connect( room, &QMatrixClient::Room::newMessage, this, &MessageEventModel::newMessage );
         qDebug() << "connected" << room;
     }
@@ -216,17 +219,17 @@ void MessageEventModel::newMessage(QMatrixClient::Event* messageEvent)
     {
         return;
     }
-    for( int i=0; i<m_currentMessages.count(); i++ )
+    for( int i = m_currentMessages.count() - 1; i >= 0; i++ )
     {
         if( messageEvent->timestamp() < m_currentMessages.at(i)->timestamp() )
         {
-            beginInsertRows(QModelIndex(), i, i);
-            m_currentMessages.insert(i, messageEvent);
+            beginInsertRows(QModelIndex(), i+1, i+1);
+            m_currentMessages.insert(i+1, messageEvent);
             endInsertRows();
             return;
         }
     }
-    beginInsertRows(QModelIndex(), m_currentMessages.count(), m_currentMessages.count());
-    m_currentMessages.append(messageEvent);
+    beginInsertRows(QModelIndex(), 0, 0);
+    m_currentMessages.insert(0, messageEvent);
     endInsertRows();
 }
