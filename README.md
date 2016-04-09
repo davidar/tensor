@@ -1,5 +1,5 @@
 # Tensor
-Tensor is an IM client for the [Matrix](https://matrix.org) protocol in development.
+Tensor is an IM client for the [Matrix](https://matrix.org) protocol in development. [![Build Status](https://travis-ci.org/davidar/tensor2.svg?branch=master)](https://travis-ci.org/davidar/tensor2)
 
 ![](client/logo.png)
 
