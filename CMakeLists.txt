@@ -32,7 +32,6 @@ add_subdirectory(lib)
 # Set up source files
 set(tensor_SRCS
     client/models/messageeventmodel.cpp
-    client/models/userlistmodel.cpp
     client/models/roomlistmodel.cpp
     client/main.cpp
     )
