@@ -31,6 +31,10 @@ cd build
 sudo make install
 ```
 
+## Android
+
+[Download *Qt for Android*](http://www.qt.io/download-open-source/#section-2), open `tensor.pro` in Qt Creator, and [build for Android](http://doc.qt.io/qt-5/androidgs.html).
+
 ## OS X
 
 ```
