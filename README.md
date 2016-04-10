@@ -78,6 +78,9 @@ an optional dependency - probably KCoreAddons.  You probably forgot to do the
 
 
 ## Windows
+
+![Screenshot](screen/win7.png)
+
 ### Installing pre-requisites
 Here you have options.
 
