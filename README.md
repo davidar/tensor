@@ -40,7 +40,9 @@ sudo make install
 
 ![Screenshot](screen/android.png)
 
-## OS X
+## OS X
+
+![Screenshot](screen/osx.png)
 
 ```
 brew install qt5
@@ -76,6 +78,12 @@ make[1]: *** [CMakeFiles/tensor.dir/all] Error 2
 an optional dependency - probably KCoreAddons.  You probably forgot to do the
 `git submodule init && git submodule update` dance.
 
+## iOS
+
+![Screenshot](screen/ipad.png)
+
+- [Qt for iOS](http://doc.qt.io/qt-5/ios-support.html)
+- [Qt5 Tutorial: Bypass Qt Creator and use XCode](https://www.youtube.com/watch?v=EAdAvMc1MCI)
 
 ## Windows
 
