@@ -12,6 +12,9 @@ Tensor is an IM client for the [Matrix](https://matrix.org) protocol in developm
 - KDE Framework Core Addons (optional; a submodule from KDE git is included in this repo and will be used if CMake doesn't find a KCoreAddons package)
 
 ## Linux
+
+![Screenshot](screen/kde4.png)
+
 ### Installing pre-requisites
 Just install things from "Pre-requisites" using your preferred package manager. If your Qt package base is fine-grained you might want to take a look at CMakeLists.txt to figure out which specific libraries Tensor uses.
 
@@ -34,6 +37,8 @@ sudo make install
 ## Android
 
 [Download *Qt for Android*](http://www.qt.io/download-open-source/#section-2), open `tensor.pro` in Qt Creator, and [build for Android](http://doc.qt.io/qt-5/androidgs.html).
+
+![Screenshot](screen/android.png)
 
 ## OS X
 
