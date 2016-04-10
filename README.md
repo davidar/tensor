@@ -35,8 +35,10 @@ sudo make install
 
 ```
 brew install qt5
-git submodule init # pull in the KCoreAddons package
-git submodule update
+git submodule update --init # pull in qmatrixclient library
+cd lib
+git submodule update --init # pull in the KCoreAddons package
+cd ..
 mkdir build
 cd build
 cmake ../ -DCMAKE_PREFIX_PATH=/usr/local/Cellar/qt5/5.5.1/ # or whatever version of qt5 brew installed
