@@ -48,10 +48,7 @@ Rectangle {
                 color: eventType == "message" ? "grey" : "lightgrey"
                 horizontalAlignment: Text.AlignRight
             }
-            TextEdit {
-                selectByMouse: true
-                readOnly: true
-                font: timelabel.font
+            Label {
                 text: content
                 wrapMode: Text.Wrap
                 width: parent.width - (x - parent.x) - spacing
