@@ -31,6 +31,7 @@ Item {
         anchors.left: parent.left
         anchors.bottom: parent.bottom
         focus: true
+        textColor: "black"
         placeholderText: "Say something..."
         onAccepted: sendLine(text)
     }
