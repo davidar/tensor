@@ -3,7 +3,7 @@ TEMPLATE = app
 QT += qml quick
 CONFIG += c++11
 
-include(lib/package.pri)
+include(lib/libqmatrixclient.pri)
 
 HEADERS += \
     client/models/messageeventmodel.h \

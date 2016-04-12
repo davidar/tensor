@@ -28,7 +28,18 @@ Rectangle {
             connection.reconnected.connect(resync)
             syncJob = connection.sync()
         })
-        connection.connectToServer(user, pass)
+        var userParts = user.split(':')
+        if(userParts.length === 1) {
+            connection.connectToServer(user, pass)
+        } else {
+            connection.resolved.connect(function() {
+                connection.connectToServer(user, pass)
+            })
+            connection.resolveError.connect(function() {
+                console.log("Couldn't resolve server!")
+            })
+            connection.resolveServer(userParts[1])
+        }
     }
 
     Item {
