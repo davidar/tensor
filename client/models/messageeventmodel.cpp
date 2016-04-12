@@ -52,7 +52,7 @@ void MessageEventModel::changeRoom(QMatrixClient::Room* room)
     m_currentRoom = room;
     if( room )
     {
-        m_currentMessages = room->messages();
+        m_currentMessages = room->messageEvents();
         std::reverse(std::begin(m_currentMessages), std::end(m_currentMessages));
         connect( room, &QMatrixClient::Room::newMessage, this, &MessageEventModel::newMessage );
         qDebug() << "connected" << room;
