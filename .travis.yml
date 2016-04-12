@@ -1,8 +1,9 @@
 dist: trusty
 language: cpp
 env:
- - INSTALL_KCOREADDONS=true
- - INSTALL_KCOREADDONS=false
+ - INSTALL_KCOREADDONS=true  XMAKE=cmake
+ - INSTALL_KCOREADDONS=false XMAKE=cmake
+ - INSTALL_KCOREADDONS=false XMAKE=qmake
 before_install:
  - sudo add-apt-repository --yes ppa:beineri/opt-qt542-trusty
  - sudo apt-get update -qq
@@ -16,7 +17,7 @@ install:
  - source /opt/qt54/bin/qt54-env.sh
  - qmllint client/qml/*.qml
  - mkdir build && cd build
- - cmake ../
+ - $XMAKE ..
  - make
 script: true
 
