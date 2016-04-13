@@ -1,4 +1,7 @@
 build
+build-android
+tensor
+tensor.apk
 .kdev4
 *.user
 *~
