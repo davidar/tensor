@@ -16,11 +16,20 @@ lib/libqmatrixclient.pri:
 	cd lib && git submodule update --init
 
 tensor.apk: build-android/target/bin/QtApp-release-unsigned.apk
-	mv -f build-android/target/bin/QtApp-release-unsigned.apk tensor.apk
+	mv -f $< $@
 
 build-android/target/bin/QtApp-release-unsigned.apk: build-android/Makefile
 	$(MAKE) -C build-android install INSTALL_ROOT=target
-	$(QT)/android_armv7/bin/androiddeployqt --release \
+	$(QT)/android_armv7/bin/androiddeployqt --deployment bundled --release --verbose \
+		--input  build-android/android-libtensor.so-deployment-settings.json \
+		--output build-android/target
+
+tensor-debug.apk: build-android/target/bin/QtApp-debug.apk
+	mv -f $< $@
+
+build-android/target/bin/QtApp-debug.apk: build-android/Makefile
+	$(MAKE) -C build-android install INSTALL_ROOT=target
+	$(QT)/android_armv7/bin/androiddeployqt --deployment bundled --install --verbose \
 		--input  build-android/android-libtensor.so-deployment-settings.json \
 		--output build-android/target
 
@@ -35,4 +44,4 @@ $(HOME)/Qt/5.5: qt-unified-linux-x86-online.run
 	./qt-unified-linux-x86-online.run --script qt-installer-noninteractive.qs --platform minimal --verbose
 
 clean:
-	rm -rf build build-android tensor tensor.apk
+	rm -rf build build-android tensor tensor.apk tensor-debug.apk

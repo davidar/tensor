@@ -5,3 +5,5 @@ tensor.apk
 .kdev4
 *.user
 *~
+tensor-debug.apk
+qt-unified-linux-x86-online.run

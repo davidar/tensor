@@ -30,6 +30,7 @@ Controller.prototype.ComponentSelectionPageCallback = function() {
 
     widget.deselectAll();
     widget.selectComponent("qt.55.android_armv7");
+    widget.selectComponent("qt.55.qtquickcontrols");
     widget.selectComponent("qt.55.qtquickcontrols.android_armv7");
 
     // widget.deselectComponent("qt.tools.qtcreator");
