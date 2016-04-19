@@ -36,12 +36,14 @@ build-android/target/bin/QtApp-debug.apk: build-android/Makefile
 build-android/Makefile: lib/libqmatrixclient.pri $(QT)
 	mkdir build-android && cd build-android && $(QT)/android_armv7/bin/qmake ..
 
-qt-unified-linux-x86-online.run:
-	wget http://download.qt.io/official_releases/online_installers/$@ && chmod a+x $@
+qt-unified-linux-x86-2.0.3-online.run:
+	wget http://master.qt.io/archive/online_installers/2.0/$@
 
-$(HOME)/Qt/5.5: qt-unified-linux-x86-online.run
-	echo "Installing Qt 5.5 to ~/Qt"
-	./qt-unified-linux-x86-online.run --script qt-installer-noninteractive.qs --platform minimal --verbose
+$(HOME)/Qt/5.5: qt-unified-linux-x86-2.0.3-online.run
+	sha256sum -c $<.sha256
+	echo "Installing Qt for Android to $@"
+	chmod a+x $<
+	./$< --script qt-installer-noninteractive.qs --platform minimal --verbose
 
 clean:
 	rm -rf build build-android tensor tensor.apk tensor-debug.apk
