@@ -4,6 +4,7 @@ QT ?= $(HOME)/Qt/5.5
 QT_ARCH ?= x86
 export ANDROID_SDK_ROOT ?= $(PWD)/android-sdk-linux
 export ANDROID_NDK_ROOT ?= $(PWD)/android-ndk-r10e
+ANDROID_ARCH ?= x86
 
 tensor: build/tensor
 	mv -f build/tensor .
@@ -74,10 +75,10 @@ $(PWD)/android-sdk-linux/build-tools/23.0.3: build-tools_r23.0.3-linux.zip
 	mkdir -p $(PWD)/android-sdk-linux/build-tools
 	unzip $< && mv android-6.0 $@ && touch $@
 
-android-ndk-r10e-linux-x86.bin:
+android-ndk-r10e-linux-$(ANDROID_ARCH).bin:
 	wget https://dl.google.com/android/ndk/$@
 
-$(PWD)/android-ndk-r10e: android-ndk-r10e-linux-x86.bin
+$(PWD)/android-ndk-r10e: android-ndk-r10e-linux-$(ANDROID_ARCH).bin
 	chmod a+x $< && ./$< && touch $@
 
 clean:
