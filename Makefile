@@ -57,7 +57,7 @@ android-sdk_r24.4.1-linux.tgz:
 	wget https://dl.google.com/android/$@
 
 android-sdk-linux: android-sdk_r24.4.1-linux.tgz
-	tar -zxvf $< && touch $@
+	tar -zxf $< && touch $@
 
 android-23_r01.zip:
 	wget https://dl.google.com/android/repository/$@
@@ -69,17 +69,17 @@ $(PWD)/android-sdk-linux/platform-tools: android-sdk-linux
 	echo y | $</tools/android update sdk -u --filter platform-tools && touch $@
 
 $(PWD)/android-sdk-linux/platforms/android-23: android-23_r01.zip
-	unzip $< && mv android-6.0 $@ && touch $@
+	unzip -q $< && mv android-6.0 $@ && touch $@
 
 $(PWD)/android-sdk-linux/build-tools/23.0.3: build-tools_r23.0.3-linux.zip
 	mkdir -p $(PWD)/android-sdk-linux/build-tools
-	unzip $< && mv android-6.0 $@ && touch $@
+	unzip -q $< && mv android-6.0 $@ && touch $@
 
 android-ndk-r10e-linux-$(ANDROID_ARCH).bin:
 	wget https://dl.google.com/android/ndk/$@
 
 $(PWD)/android-ndk-r10e: android-ndk-r10e-linux-$(ANDROID_ARCH).bin
-	chmod a+x $< && ./$< && touch $@
+	chmod a+x $< && ./$< >/dev/null && touch $@
 
 clean:
 	rm -rf build build-android android-sdk-linux android-ndk-r10e tensor tensor.apk tensor-debug.apk
