@@ -1,11 +1,13 @@
 dist: trusty
 language: cpp
+sudo: required
 env:
  - OS=linux
  - OS=android
 before_install:
  - cd lib && git submodule update --init && cd ..
  - if [ $OS = linux ]; then sudo add-apt-repository --yes ppa:beineri/opt-qt542-trusty && sudo apt-get update -qq && sudo apt-get install -y --force-yes qt54base qt54declarative qt54quickcontrols; fi
+ - if [ $OS = android ]; then sudo apt-get update -qq && sudo apt-get install -y --force-yes libc6-i386 gcc-multilib lib32z1; fi
 install:
  - if [ $OS = linux ]; then source /opt/qt54/bin/qt54-env.sh && qmllint client/qml/*.qml && make tensor; fi
  - if [ $OS = android ]; then make tensor.apk QT_ARCH=x64 ANDROID_ARCH=x86_64; fi
