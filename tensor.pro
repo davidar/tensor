@@ -7,11 +7,13 @@ include(lib/libqmatrixclient.pri)
 
 HEADERS += \
     client/models/messageeventmodel.h \
-    client/models/roomlistmodel.h
+    client/models/roomlistmodel.h \
+    client/settings.h
 
 SOURCES += client/main.cpp \
     client/models/messageeventmodel.cpp \
-    client/models/roomlistmodel.cpp
+    client/models/roomlistmodel.cpp \
+    client/settings.cpp
 
 RESOURCES += client/resources.qrc
 

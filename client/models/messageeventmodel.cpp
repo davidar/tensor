@@ -157,7 +157,8 @@ QVariant MessageEventModel::data(const QModelIndex& index, int role) const
         if( event->type() == QMatrixClient::EventType::RoomMessage )
         {
             QMatrixClient::RoomMessageEvent* e = static_cast<QMatrixClient::RoomMessageEvent*>(event);
-            return m_connection->user(e->userId())->displayname();
+            QMatrixClient::User *user = m_connection->user(e->userId());
+            return user->displayname();
         }
         return QVariant();
     }

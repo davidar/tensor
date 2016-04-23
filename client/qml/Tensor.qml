@@ -12,28 +12,34 @@ Rectangle {
 
     property var syncJob: null
 
-    Connection {
-        id: connection
-    }
+    Connection { id: connection }
+    Settings   { id: settings }
 
     function resync() {
         login.visible = false; mainView.visible = true
         syncJob = connection.sync(30000)
     }
 
-    function login(user, pass) {
+    function login(user, pass, connect) {
+        if(!connect) connect = connection.connectToServer
+
         connection.connected.connect(function() {
+            settings.setValue("user",  connection.userId())
+            settings.setValue("token", connection.token())
+
             connection.connectionError.connect(connection.reconnect)
             connection.syncDone.connect(resync)
             connection.reconnected.connect(resync)
+
             syncJob = connection.sync()
         })
+
         var userParts = user.split(':')
-        if(userParts.length === 1) {
-            connection.connectToServer(user, pass)
+        if(userParts.length === 1 || userParts[1] === "matrix.org") {
+            connect(user, pass)
         } else {
             connection.resolved.connect(function() {
-                connection.connectToServer(user, pass)
+                connect(user, pass)
             })
             connection.resolveError.connect(function() {
                 console.log("Couldn't resolve server!")
@@ -77,5 +83,13 @@ Rectangle {
         id: login
         window: window
         anchors.fill: parent
+        Component.onCompleted: {
+            var user =  settings.value("user")
+            var token = settings.value("token")
+            if(user && token) {
+                login.login(true)
+                window.login(user, token, connection.connectWithToken)
+            }
+        }
     }
 }

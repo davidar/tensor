@@ -5,9 +5,11 @@
 
 #include "connection.h"
 #include "room.h"
+#include "user.h"
 #include "jobs/syncjob.h"
 #include "models/messageeventmodel.h"
 #include "models/roomlistmodel.h"
+#include "settings.h"
 using namespace QMatrixClient;
 
 // https://forum.qt.io/topic/57809
@@ -29,12 +31,14 @@ int main(int argc, char* argv[]) {
     view.connect(view.engine(), SIGNAL(quit()), &app, SLOT(quit()));
     new QQmlFileSelector(view.engine(), &view);
 
-    qmlRegisterType<SyncJob>();
-    qmlRegisterType<Room>();
-    qRegisterMetaType<Room*>("Room*");
-    qmlRegisterType<Connection>("Matrix", 1, 0, "Connection");
-    qmlRegisterType<MessageEventModel>("Matrix", 1, 0, "MessageEventModel");
-    qmlRegisterType<RoomListModel>("Matrix", 1, 0, "RoomListModel");
+    qmlRegisterType<SyncJob>(); qRegisterMetaType<SyncJob*> ("SyncJob*");
+    qmlRegisterType<Room>();    qRegisterMetaType<Room*>    ("Room*");
+    qmlRegisterType<User>();    qRegisterMetaType<Room*>    ("User*");
+
+    qmlRegisterType<Connection>        ("Matrix", 1, 0, "Connection");
+    qmlRegisterType<MessageEventModel> ("Matrix", 1, 0, "MessageEventModel");
+    qmlRegisterType<RoomListModel>     ("Matrix", 1, 0, "RoomListModel");
+    qmlRegisterType<Settings>          ("Matrix", 1, 0, "Settings");
 
     view.setSource(QUrl("qrc:/qml/Tensor.qml"));
     view.setResizeMode(QQuickView::SizeRootObjectToView);

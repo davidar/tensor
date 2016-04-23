@@ -5,9 +5,9 @@ Item {
     //color: "#eee"
     property variant window
 
-    function login() {
+    function login(pretend) {
         label.text = "Please wait..."
-        window.login(userNameField.text, passwordField.text)
+        if(!pretend) window.login(userNameField.text, passwordField.text)
         userNameField.enabled = false
         passwordField.enabled = false
         userNameField.opacity = 0
