@@ -2,10 +2,12 @@ dist: trusty
 language: cpp
 env:
  - OS=linux
+ - OS=android
 before_install:
  - 'cd lib && git submodule update --init && cd ..'
  - '[ $OS = linux ] && sudo add-apt-repository --yes ppa:beineri/opt-qt542-trusty && sudo apt-get update -qq && sudo apt-get install -y --force-yes qt54base qt54declarative qt54quickcontrols'
 install:
  - '[ $OS = linux ] && source /opt/qt54/bin/qt54-env.sh && qmllint client/qml/*.qml && make tensor'
+ - '[ $OS = android ] && make tensor.apk'
 script: true
 

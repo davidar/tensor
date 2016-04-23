@@ -7,3 +7,9 @@ tensor.apk
 *~
 tensor-debug.apk
 qt-unified-linux-x86-*-online.run
+android-23_r01.zip
+android-ndk-r10e-linux-x86.bin
+android-ndk-r10e/
+android-sdk-linux/
+android-sdk_r24.4.1-linux.tgz
+build-tools_r23.0.3-linux.zip
