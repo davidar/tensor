@@ -11,12 +11,18 @@ Rectangle {
     color: "#eee"
 
     property var syncJob: null
+    property bool initialised: false
 
     Connection { id: connection }
     Settings   { id: settings }
 
     function resync() {
-        login.visible = false; mainView.visible = true
+        if(!initialised) {
+            login.visible = false
+            mainView.visible = true
+            roomListItem.init()
+            initialised = true
+        }
         syncJob = connection.sync(30000)
     }
 

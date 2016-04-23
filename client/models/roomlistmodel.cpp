@@ -40,8 +40,8 @@ void RoomListModel::setConnection(QMatrixClient::Connection* connection)
     m_connection = connection;
     m_rooms.clear();
     connect( connection, &QMatrixClient::Connection::newRoom, this, &RoomListModel::addRoom );
-    for( QMatrixClient::Room* room: connection->roomMap().values() )
-    {
+    for( QMatrixClient::Room* room: connection->roomMap().values() ) {
+        connect( room, &QMatrixClient::Room::namesChanged, this, &RoomListModel::namesChanged );
         m_rooms.append(room);
     }
     endResetModel();
@@ -55,6 +55,7 @@ QMatrixClient::Room* RoomListModel::roomAt(int row)
 void RoomListModel::addRoom(QMatrixClient::Room* room)
 {
     beginInsertRows(QModelIndex(), m_rooms.count(), m_rooms.count());
+    connect( room, &QMatrixClient::Room::namesChanged, this, &RoomListModel::namesChanged );
     m_rooms.append(room);
     endInsertRows();
 }

@@ -8,12 +8,27 @@ Rectangle {
     signal enterRoom(var room)
     signal joinRoom(string name)
 
+    property bool initialised: false
+
     RoomListModel {
         id: rooms
     }
 
     function setConnection(conn) {
         rooms.setConnection(conn)
+    }
+
+    function init() {
+        initialised = true
+        var found = false
+        for(var i = 0; i < rooms.rowCount(); i++) {
+            if(rooms.roomAt(i).canonicalAlias() === "#tensor:matrix.org") {
+                roomListView.currentIndex = i
+                enterRoom(rooms.roomAt(i))
+                found = true
+            }
+        }
+        if(!found) joinRoom("#tensor:matrix.org")
     }
 
     function refresh() {
@@ -61,6 +76,11 @@ Rectangle {
                 height: 20
                 radius: 2
                 color: "#9c27b0"
+            }
+
+            onCountChanged: if(initialised) {
+                roomListView.currentIndex = count-1
+                enterRoom(rooms.roomAt(count-1))
             }
         }
 
