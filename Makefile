@@ -1,6 +1,7 @@
 .PHONY: clean
 
 QT ?= $(HOME)/Qt/5.5
+QT_ARCH ?= x86
 export ANDROID_SDK_ROOT ?= $(PWD)/android-sdk-linux
 export ANDROID_NDK_ROOT ?= $(PWD)/android-ndk-r10e
 
@@ -41,13 +42,14 @@ build-android/Makefile: lib/libqmatrixclient.pri $(QT) $(ANDROID_NDK_ROOT) \
   $(ANDROID_SDK_ROOT)/build-tools/23.0.3
 	mkdir -p build-android && cd build-android && $(QT)/android_armv7/bin/qmake ..
 
-qt-unified-linux-x86-2.0.3-online.run:
+qt-unified-linux-$(QT_ARCH)-2.0.3-online.run:
 	wget http://master.qt.io/archive/online_installers/2.0/$@
 
-$(HOME)/Qt/5.5: qt-unified-linux-x86-2.0.3-online.run
+$(HOME)/Qt/5.5: qt-unified-linux-$(QT_ARCH)-2.0.3-online.run
 	sha256sum -c $<.sha256
 	echo "Installing Qt for Android to $@"
 	chmod a+x $<
+	ls -lh $<
 	./$< --script qt-installer-noninteractive.qs --platform minimal --verbose
 
 android-sdk_r24.4.1-linux.tgz:

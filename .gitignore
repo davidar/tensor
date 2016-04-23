@@ -6,7 +6,7 @@ tensor.apk
 *.user
 *~
 tensor-debug.apk
-qt-unified-linux-x86-*-online.run
+qt-unified-linux-*-online.run
 android-23_r01.zip
 android-ndk-r10e-linux-x86.bin
 android-ndk-r10e/
