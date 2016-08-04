@@ -20,6 +20,7 @@
 
 #include <QtGui/QBrush>
 #include <QtGui/QColor>
+#include <QtCore/QDebug>
 
 #include "lib/connection.h"
 #include "lib/room.h"
