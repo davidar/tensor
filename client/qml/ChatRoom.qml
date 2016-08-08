@@ -27,14 +27,13 @@ Rectangle {
         id: chatView
         anchors.fill: parent
         flickableDirection: Flickable.VerticalFlick
-        rotation: 180 // https://wiki.qt.io/How_to_make_QML_ListView_align_bottom-to-top
+        verticalLayoutDirection: ListView.BottomToTop
         model: MessageEventModel { id: messageModel }
 
         delegate: Row {
             id: message
             width: parent.width
             spacing: 8
-            rotation: 180
 
             Label {
                 id: timelabel
@@ -62,7 +61,6 @@ Rectangle {
             delegate: Rectangle {
                 width: parent.width
                 height: childrenRect.height
-                rotation: 180
                 Label {
                     width: parent.width
                     text: section.toLocaleString("yyyy-MM-dd")
@@ -71,8 +69,8 @@ Rectangle {
             }
         }
 
-        onAtYEndChanged: {
-            if(currentRoom && atYEnd) currentRoom.getPreviousContent()
+        onAtYBeginningChanged: {
+            if(currentRoom && atYBeginning) currentRoom.getPreviousContent()
         }
     }
 }
