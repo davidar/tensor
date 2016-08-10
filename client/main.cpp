@@ -1,7 +1,6 @@
 #include <QGuiApplication>
-#include <QQmlEngine>
-#include <QQmlFileSelector>
 #include <QQuickView>
+#include <QtQml>
 
 #include "connection.h"
 #include "room.h"
