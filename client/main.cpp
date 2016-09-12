@@ -32,7 +32,7 @@ int main(int argc, char* argv[]) {
 
     qmlRegisterType<SyncJob>(); qRegisterMetaType<SyncJob*> ("SyncJob*");
     qmlRegisterType<Room>();    qRegisterMetaType<Room*>    ("Room*");
-    qmlRegisterType<User>();    qRegisterMetaType<Room*>    ("User*");
+    qmlRegisterType<User>();    qRegisterMetaType<User*>    ("User*");
 
     qmlRegisterType<Connection>        ("Matrix", 1, 0, "Connection");
     qmlRegisterType<MessageEventModel> ("Matrix", 1, 0, "MessageEventModel");
