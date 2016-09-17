@@ -21,10 +21,11 @@
 #include <QtCore/QAbstractListModel>
 #include <QtCore/QModelIndex>
 
+#include "events/event.h"
+
 namespace QMatrixClient
 {
     class Room;
-    class Event;
     class Connection;
 }
 
@@ -58,7 +59,7 @@ class MessageEventModel: public QAbstractListModel
     private:
         QMatrixClient::Connection* m_connection;
         QMatrixClient::Room* m_currentRoom;
-        QList<QMatrixClient::Event*> m_currentMessages;
+        QMatrixClient::Events m_currentMessages;
 };
 
 #endif // LOGMESSAGEMODEL_H
