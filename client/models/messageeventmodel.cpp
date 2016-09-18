@@ -59,7 +59,7 @@ void MessageEventModel::changeRoom(QMatrixClient::Room* room)
     }
     else
     {
-        m_currentMessages = QList<QMatrixClient::Event*>();
+        m_currentMessages.clear();
     }
     endResetModel();
 }

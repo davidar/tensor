@@ -10,7 +10,6 @@ Rectangle {
     focus: true
     color: "#eee"
 
-    property var syncJob: null
     property bool initialised: false
 
     Connection { id: connection }
@@ -23,7 +22,7 @@ Rectangle {
             roomListItem.init()
             initialised = true
         }
-        syncJob = connection.sync(30000)
+        connection.sync(30000)
     }
 
     function login(user, pass, connect) {
@@ -37,7 +36,7 @@ Rectangle {
             connection.syncDone.connect(resync)
             connection.reconnected.connect(resync)
 
-            syncJob = connection.sync()
+            connection.sync()
         })
 
         var userParts = user.split(':')
