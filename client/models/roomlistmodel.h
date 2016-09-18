@@ -38,7 +38,7 @@ class RoomListModel: public QAbstractListModel
         Q_INVOKABLE QMatrixClient::Room* roomAt(int row);
 
         QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
-        int rowCount(const QModelIndex& parent=QModelIndex()) const override;
+        Q_INVOKABLE int rowCount(const QModelIndex& parent=QModelIndex()) const override;
 
     private slots:
         void namesChanged(QMatrixClient::Room* room);

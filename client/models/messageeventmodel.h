@@ -18,10 +18,10 @@
 #ifndef LOGMESSAGEMODEL_H
 #define LOGMESSAGEMODEL_H
 
+#include "events/event.h"
+
 #include <QtCore/QAbstractListModel>
 #include <QtCore/QModelIndex>
-
-#include "events/event.h"
 
 namespace QMatrixClient
 {
@@ -49,17 +49,13 @@ class MessageEventModel: public QAbstractListModel
 
         //override QModelIndex index(int row, int column, const QModelIndex& parent=QModelIndex()) const;
         //override QModelIndex parent(const QModelIndex& index) const;
-        int rowCount(const QModelIndex& parent) const override;
+        int rowCount(const QModelIndex& parent = QModelIndex()) const override;
         QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
         QHash<int, QByteArray> roleNames() const override;
-
-    public slots:
-        void newMessage(QMatrixClient::Event* messageEvent);
 
     private:
         QMatrixClient::Connection* m_connection;
         QMatrixClient::Room* m_currentRoom;
-        QMatrixClient::Events m_currentMessages;
 };
 
 #endif // LOGMESSAGEMODEL_H
