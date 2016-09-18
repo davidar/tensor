@@ -63,7 +63,8 @@ Rectangle {
                 height: childrenRect.height
                 Label {
                     width: parent.width
-                    text: section.toLocaleString("yyyy-MM-dd")
+                    text: section.toLocaleString(Qt.locale())
+                    color: "grey"
                     horizontalAlignment: Text.AlignRight
                 }
             }

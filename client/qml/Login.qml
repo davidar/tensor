@@ -6,7 +6,7 @@ Item {
     property variant window
 
     function login(pretend) {
-        label.text = "Please wait..."
+        label.text = qsTr("Please wait...")
         if(!pretend) window.login(userNameField.text, passwordField.text)
         userNameField.enabled = false
         passwordField.enabled = false
@@ -49,21 +49,21 @@ Item {
         Label {
             id: label
             font.pixelSize: phantomLabel.font.pixelSize * 5/2
-            text: "Tensor"
+            text: qsTr("Tensor")
             color: "#888"
         }
 
         TextField {
             id: userNameField
             width: parent.width
-            placeholderText: "User name"
+            placeholderText: qsTr("Username")
         }
 
         TextField {
             id: passwordField
             echoMode: TextInput.Password
             width: parent.width
-            placeholderText: "Password"
+            placeholderText: qsTr("Password")
             onAccepted: login()
         }
 

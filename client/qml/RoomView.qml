@@ -32,7 +32,7 @@ Item {
         anchors.bottom: parent.bottom
         focus: true
         textColor: "black"
-        placeholderText: "Say something..."
+        placeholderText: qsTr("Say something...")
         onAccepted: sendLine(text)
     }
 }

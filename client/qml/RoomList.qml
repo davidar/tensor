@@ -87,7 +87,7 @@ Rectangle {
         TextField {
             id: textEntry
             width: parent.width
-            placeholderText: "Join room..."
+            placeholderText: qsTr("Join room...")
             onAccepted: { joinRoom(text); text = "" }
         }
     }
